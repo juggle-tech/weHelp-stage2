@@ -1,7 +1,7 @@
 import query
 
 from fastapi import *
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from sqlmodel import SQLModel, Session
 from database import SessionDep, engine, create_database_if_not_exists
@@ -57,35 +57,79 @@ async def get_attractions(request: Request, session: SessionDep, page: int = 0,
 
     # Check if the input page is valid
     if page < 0:
-        return {"error": True, "message": "Page must be a positive integer"}
+        return JSONResponse(
+            status_code=400,
+            content={"error": True, "message": "Page must be a positive integer"}
+        )
 
     # Check if the input category is valid
     if category:
         categories_list = query.get_all_categories(session)
         if category not in categories_list:
-            return {"error": True, "message": "Category does not exist"}
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "Category does not exist"}
+            )
 
-    # Retrieve filtered data 
-    data, next_page = query.get_filtered_attractions(session, page, category, keyword)
-
+    # Retrieve filtered data
+    try:
+        data, next_page = query.get_filtered_attractions(session, page, category, keyword)
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        )
     return {"nextPage": next_page, "data": data}
 
 
 @app.get("/api/attraction/{attractionId}")
 async def get_an_attraction(request: Request, session: SessionDep, attractionId: int):
-    return 
+    try:
+        data = query.get_attraction_by_id(session, attractionId)
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        )
+
+    if data is None:
+        return JSONResponse(
+            status_code=400,
+            content={"error": True, "message": "景點編號不正確"}
+        )
+    return {"data": data}
 
 
 # Attraction Category
 @app.get("/api/categories")
 async def get_category(request: Request, session: SessionDep):
-    return 
+    try:
+        data = query.get_all_categories(session)
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        )
+
+    return {"data": data}
 
 
 # MRT Station
 @app.get("/api/mrts")
 async def get_mrts(request: Request, session: SessionDep):
-    return 
+    try:
+        data = query.get_ordered_mrts(session)
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        )
+    
+    return {"data": data}
 
 
 app.mount("/static", StaticFiles(directory = "static"), name = "static")
