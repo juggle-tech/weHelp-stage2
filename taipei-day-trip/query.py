@@ -1,4 +1,7 @@
+from itertools import chain
 import json
+from operator import itemgetter
+from typing import Counter
 
 from sqlmodel import func, or_, select
 from model import Attraction
@@ -51,9 +54,11 @@ def get_ordered_mrts(session):
 
     stat = select(Attraction.mrt).where(Attraction.mrt.is_not(None))
     results = session.exec(stat).all()
-
-    # Count the num of attractions near each MRT station
     
-    # List them in order from most attractions to least
+    # Count the num of attractions near each MRT station
+    mrts = Counter(chain.from_iterable(results))
 
-    return 
+    # Sort MRT stations by the num of attractions
+    sorted_mrts = [station for station, count in mrts.most_common()]
+
+    return sorted_mrts
