@@ -20,18 +20,6 @@ def _parse_images(img_data, img_host):
     return img_list
 
 
-# Helper function for parsing "MRT"
-def _parse_mrts(mrt_data):
-
-    mrt_list = []
-    if not mrt_data:
-        return mrt_list
-    for mrt in mrt_data.split("、"):
-        if mrt != "":
-            mrt_list.append(mrt)
-    return mrt_list
-
-
 # Load Taipei attractions data from JSON file
 def load_attractions_if_updated(session: Session):
     
@@ -61,7 +49,7 @@ def load_attractions_if_updated(session: Session):
             name = item["name"],
             category = item["CAT"],
             address = item["address"],
-            mrt = _parse_mrts(item["MRT"]),
+            mrt = item["MRT"],
             description = item["description"],
             transport = item["direction"],
             lat = float(item["latitude"]),

@@ -19,8 +19,8 @@ def get_filtered_attractions(session, page, category, keyword):
     if keyword:
         stat = stat.where(
             or_(
-                Attraction.name.contains(keyword), 
-                func.json_contains(Attraction.mrt, json.dumps(keyword))
+                Attraction.name.contains(keyword),
+                Attraction.mrt == keyword
             )
         )
 
@@ -52,11 +52,12 @@ def get_attraction_by_id(session, id):
 
 def get_ordered_mrts(session):
 
-    stat = select(Attraction.mrt).where(Attraction.mrt.is_not(None))
+    # Filter null and empty string
+    stat = select(Attraction.mrt).where(Attraction.mrt.is_not(None), Attraction.mrt != "")
     results = session.exec(stat).all()
     
     # Count the num of attractions near each MRT station
-    mrts = Counter(chain.from_iterable(results))
+    mrts = Counter(results)
 
     # Sort MRT stations by the num of attractions
     sorted_mrts = [station for station, count in mrts.most_common()]

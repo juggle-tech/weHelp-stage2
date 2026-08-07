@@ -15,7 +15,7 @@ class Attraction(SQLModel, table=True):
     attr_id: int = Field(nullable=False)
     name: str = Field(max_length=255, nullable=False)
     category: str = Field(max_length=255, nullable=False)
-    mrt: Optional[List[str]] = Field(default=None, sa_column=Column(JSON))
+    mrt: Optional[str] = Field(default=None, max_length=255)
     address: str = Field(max_length=255, nullable=False)
     description: str = Field(sa_column=Column(Text, nullable=False))
     transport: str = Field(sa_column=Column(Text, nullable=False))
