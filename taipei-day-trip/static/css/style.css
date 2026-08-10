@@ -1,0 +1,222 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    border: solid 2px black;
+    font-family: Noto Sans TC;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* Navigation Bar */
+.navBar {
+    border: solid 1px red;
+    width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0px;
+}
+
+.logo {
+    font-weight: 700;
+    font-style: bold;
+    font-size: 30px;
+    text-decoration: none;
+    color: #448899;
+}
+
+.menu > a {
+    font-weight: 500;
+    font-size: 16px;
+    text-decoration: none;
+    color: #666666;
+    padding: 10px;
+}
+
+
+/* Hero Section */
+.hero {
+    background-image: url(/taipei-day-trip/static/images/welcome\ image.png);
+    background-size: cover;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.heroContent {
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    padding: 10px;
+    margin: 75px;
+    gap: 25px;
+    border: solid 1px blue;
+}
+
+.hero h1 {
+    box-shadow: 0px 0px 30px 0px #AABBCC;
+    font-style: Bold;
+    font-size: 28px;
+    color: #FFFFFF;
+}
+
+.hero p {
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 16px;
+    color: #FFFFFF;
+}
+
+.searchBar {
+    height: 46px;
+    display: flex;
+    flex-direction: row;
+}
+
+.searchDropdown {
+    background-color: #EEEEEE;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px 0 0 5px;
+    font-weight: 500;
+    font-size: 16px;
+    height: 100%;
+    white-space: nowrap;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.searchKeyword {
+    border: none;
+    padding: 15px;
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 16px;
+    height: 100%;
+}
+
+.searchKeyword:focus {
+  outline: none;
+}
+
+.submitBtn {
+    background-color: #448899;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    padding: 8px 15px;
+    height: 100%;
+    cursor: pointer;
+}
+
+
+/* Attraction Block */
+.mainContentBlock {
+    width: 1200px;
+}
+
+/** MRT Bar **/
+.mrtBar {
+    display: flex;
+    align-items: center;
+}
+
+.mrtMenu {
+    display: flex;
+    align-items: center;
+    padding: 10px 13px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    white-space: nowrap;
+}
+
+.mrtMenu::-webkit-scrollbar {
+    display: none;
+}
+
+.leftBtn, .rightBtn {
+    background: none;
+    border: none;
+    padding: 9px 0 9px 15px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.leftBtn {
+    padding: 9px 0 9px 15px;
+}
+
+.rightBtn {
+    padding: 9px 15px 9px 0;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    padding: 5px 15px;
+    flex-shrink: 0;
+}
+
+li > button {
+    border: none;
+    background: none;
+    white-space: nowrap;
+    color: #666666;
+    cursor: pointer;
+    transition: color 0.2s, font-size 0.2s;
+}
+
+li > button:hover {
+    color: #4d4d4d;
+    text-decoration: underline;
+}
+
+
+/** Attraction Block **/
+
+
+
+/* Footer */
+.footer {
+    width: 100%;
+    background: #757575;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.footer p {
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 16px;
+    padding: 5px 0;
+    color: #FFFFFF;
+}
+
+
+/* Screen size: 600px - 1200px */
+@media (min-width: 600px) and (max-width: 1199px) {
+    .navBar, .mainContentBlock {
+        width: 100%;
+    }
+}
+
+
+
+/* Screen size: < 600px */
+@media (max-width: 600px) {
+    .navBar, .mainContentBlock {
+        width: 100%;
+    }
+}

@@ -2,10 +2,144 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!-- <link href="{{ url_for('static', path='/css/style.css') }}" rel="stylesheet">
+  <script src="{{ url_for('static', path='/js/home.js') }}" defer></script> -->
+
+  <link href="./css/style.css" rel="stylesheet">
+  <script src="./js/home.js" defer></script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Index</title>
+  <title>Taipei Day Trip</title>
 </head>
 <body>
+  
+  <div class="navBar">
+    <a href="" class="logo">台北一日遊</a>
+
+    <nav>
+      <ul class="menu">
+        <a href="">預定行程</a>
+        <a href="">登入/註冊</a>
+      </ul>
+    </nav>
+  </div>
+  
+  <div class="hero">
+    <div class="heroContent">
+      <h1>輕鬆享受台北一日悠閑</h1>
+      <p>探索每個角落，體驗城市的深度旅遊行程</p>
+
+      <form class="searchBar">
+        <!-- Dropdown menu for categories -->
+        <div class="">
+          <button type="button" class="searchDropdown">全部分類 ▼</button>
+
+          <ul class="searchDropdownMenu" hidden>
+            <li><button type="button">全部分類</button></li>
+            <li><button type="button">Category 1</button></li>
+            <li><button type="button">Category 2</button></li>
+            <li><button type="button">Category 3</button></li>
+          </ul>
+        </div>
+
+        <!-- Input for keywords -->
+        <input type="search" name="keyword" class="searchKeyword" placeholder=" 輸入景點名稱查詢">
+
+        <!-- Search button -->
+        <button type="submit" class="submitBtn">
+          <svg viewBox="0 0 28 28" width="30" height="30" fill="none" stroke="#ffffff" stroke-width="3">
+            <circle cx="12" cy="12" r="9"></circle>
+            <line x1="18" y1="18" x2="26" y2="26"></line>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="mainContentBlock">
+    <div class="mrtBar">
+      <button type="button" class="leftBtn">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="11"></circle>
+          <polyline points="13.5 8 9.5 12 13.5 16"></polyline>
+        </svg>
+      </button>
+
+      <ul class="mrtMenu">
+        <li><button type="button">劍潭</button></li>
+        <li><button type="button">圓山</button></li>
+        <li><button type="button">士林</button></li>
+        <li><button type="button">新北投</button></li>
+        <li><button type="button">台大醫院</button></li>
+        <li><button type="button">龍山寺</button></li>
+        <li><button type="button">西門</button></li>
+        <li><button type="button">動物園</button></li>
+        <li><button type="button">小南門</button></li>
+        <li><button type="button">雙連</button></li>
+        <li><button type="button">善導寺</button></li>
+        <li><button type="button">中山</button></li>
+        <li><button type="button">民權西路</button></li>
+        <li><button type="button">中正紀念堂</button></li>
+      </ul>
+
+      <button type="button" class="rightBtn">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="11"></circle>
+        <polyline points="10.5 8 14.5 12 10.5 16"></polyline>
+      </svg>
+      </button>
+    </div>
+    
+    <div class="attrBlocks">
+      <a href="" class="attrCard">
+        <div>
+          <img src="" alt="" class="attrImg">
+          <h3 class="attrTitle">Attraction Name</h3>
+        </div>
+        <div class="attrInfo">
+          <span class="attrMrt">MRT station</span>
+          <span class="attrCate">Category</span>
+        </div>
+      </a>
+
+      <a href="" class="attrCard">
+        <div>
+          <img src="" alt="" class="attrImg">
+          <h3 class="attrTitle">Attraction Name</h3>
+        </div>
+        <div class="attrInfo">
+          <span class="attrMrt">MRT station</span>
+          <span class="attrCate">Category</span>
+        </div>
+      </a>
+
+      <a href="" class="attrCard">
+        <div>
+          <img src="" alt="" class="attrImg">
+          <h3 class="attrTitle">Attraction Name</h3>
+        </div>
+        <div class="attrInfo">
+          <span class="attrMrt">MRT station</span>
+          <span class="attrCate">Category</span>
+        </div>
+      </a>
+
+      <a href="" class="attrCard">
+        <div>
+          <img src="" alt="" class="attrImg">
+          <h3 class="attrTitle">Attraction Name</h3>
+        </div>
+        <div class="attrInfo">
+          <span class="attrMrt">MRT station</span>
+          <span class="attrCate">Category</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>COPYRIGHT &copy; 2021 台北一日遊</p>
+  </div>
   
 </body>
 </html>
