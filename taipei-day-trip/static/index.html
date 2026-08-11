@@ -5,6 +5,8 @@
 
   <link href="./static/css/style.css" rel="stylesheet">
   <script src="./static/js/home.js" defer></script>
+  <script src="./static/js/script.js" defer></script>
+  
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Taipei Day Trip</title>
@@ -33,14 +35,11 @@
       <!-- Search bar -->
       <form class="searchBar">
         <!-- Dropdown menu for categories -->
-        <div class="">
-          <button type="button" class="searchDropdown">全部分類 ▼</button>
+        <div class="searchDropdownWrapper">
+          <button id="cateSearch" type="button" class="searchDropdown">全部分類▼</button>
 
-          <ul class="searchDropdownMenu" hidden>
+          <ul id="cateMenu" class="searchDropdownMenu">
             <li><button type="button">全部分類</button></li>
-            <li><button type="button">Category 1</button></li>
-            <li><button type="button">Category 2</button></li>
-            <li><button type="button">Category 3</button></li>
           </ul>
         </div>
 
@@ -95,63 +94,8 @@
     </div>
     
     <!-- Attraction cards -->
-    <div id="attrBlocks" class="attrBlocks">
-      <!-- <a href="" class="attrCard">
-        <div class="attrName">
-          <img src="images/welcomeImage.png" alt="">
-          <p>Attraction Name</p>
-        </div>
-        <div class="attrInfo">
-          <span class="attrMrt">MRT station</span>
-          <span class="attrCate">Category</span>
-        </div>
-      </a>
+    <div id="attrBlocks" class="attrBlocks"></div>
 
-      <a href="" class="attrCard">
-        <div class="attrName">
-          <img src="images/welcomeImage.png" alt="">
-          <p>Attraction Name</p>
-        </div>
-        <div class="attrInfo">
-          <span class=" ">MRT station</span>
-          <span class="attrCate">Category</span>
-        </div>
-      </a>
-
-      <a href="" class="attrCard">
-        <div class="attrName">
-          <img src="images/welcomeImage.png" alt="">
-          <p>Attraction Name</p>
-        </div>
-        <div class="attrInfo">
-          <span class="attrMrt">MRT station</span>
-          <span class="attrCate">Category</span>
-        </div>
-      </a>
-
-      <a href="" class="attrCard">
-        <div class="attrName">
-          <img src="images/welcomeImage.png" alt="">
-          <p>Attraction Name</p>
-        </div>
-        <div class="attrInfo">
-          <span class="attrMrt">MRT station</span>
-          <span class="attrCate">Category</span>
-        </div>
-      </a>
-
-      <a href="" class="attrCard">
-        <div class="attrName">
-          <img src="images/welcomeImage.png" alt="">
-          <p>Attraction Name</p>
-        </div>
-        <div class="attrInfo">
-          <span class="attrMrt">MRT station</span>
-          <span class="attrCate">Category</span>
-        </div>
-      </a> -->
-
-    </div>
   </div>
 
   <!-- Footer -->
