@@ -2,11 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- <link href="{{ url_for('static', path='/css/style.css') }}" rel="stylesheet">
-  <script src="{{ url_for('static', path='/js/home.js') }}" defer></script> -->
 
-  <link href="./css/style.css" rel="stylesheet">
-  <script src="./js/home.js" defer></script>
+  <link href="./static/css/style.css" rel="stylesheet">
+  <script src="./static/js/home.js" defer></script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Taipei Day Trip</title>
@@ -97,14 +95,25 @@
     </div>
     
     <!-- Attraction cards -->
-    <div class="attrBlocks">
-      <a href="" class="attrCard">
+    <div id="attrBlocks" class="attrBlocks">
+      <!-- <a href="" class="attrCard">
         <div class="attrName">
           <img src="images/welcomeImage.png" alt="">
           <p>Attraction Name</p>
         </div>
         <div class="attrInfo">
           <span class="attrMrt">MRT station</span>
+          <span class="attrCate">Category</span>
+        </div>
+      </a>
+
+      <a href="" class="attrCard">
+        <div class="attrName">
+          <img src="images/welcomeImage.png" alt="">
+          <p>Attraction Name</p>
+        </div>
+        <div class="attrInfo">
+          <span class=" ">MRT station</span>
           <span class="attrCate">Category</span>
         </div>
       </a>
@@ -140,18 +149,7 @@
           <span class="attrMrt">MRT station</span>
           <span class="attrCate">Category</span>
         </div>
-      </a>
-
-      <a href="" class="attrCard">
-        <div class="attrName">
-          <img src="images/welcomeImage.png" alt="">
-          <p>Attraction Name</p>
-        </div>
-        <div class="attrInfo">
-          <span class="attrMrt">MRT station</span>
-          <span class="attrCate">Category</span>
-        </div>
-      </a>
+      </a> -->
 
     </div>
   </div>

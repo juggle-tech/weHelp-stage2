@@ -10,7 +10,6 @@ html {
 }
 
 body {
-    /* border: solid 2px black; */
     font-family: Noto Sans TC;
     width: 100%;
     display: flex;
@@ -32,7 +31,6 @@ body {
 }
 
 .navBar {
-    /* border: solid 1px red; */
     width: 1200px;
     display: flex;
     justify-content: space-between;
@@ -58,7 +56,7 @@ body {
 
 /** Hero Section **/
 .hero {
-    background-image: url(/taipei-day-trip/static/images/welcomeImage.png);
+    background-image: url(/static/images/welcomeImage.png);
     background-size: cover;
     width: 100%;
     padding: 10px;
@@ -210,14 +208,6 @@ li > button:hover {
     padding: 15px;
 }
 
-/* .attrCard { 
-    text-decoration: none;
-    height: 242px;
-    border-radius: 5px;
-    background: #FFFFFF;
-    border: 1px solid #E8E8E8;
-} */
-
 .attrCard { 
     text-decoration: none;
     display: flex;
@@ -229,7 +219,6 @@ li > button:hover {
 
 .attrName {
     position: relative;
-    /* border: 1px solid red; */
     display: flex;
     flex-direction: column;
     height: 242px;
