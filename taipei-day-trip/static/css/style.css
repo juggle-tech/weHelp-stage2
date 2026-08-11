@@ -310,8 +310,25 @@ li button {
 
 
 
-/** Screen size: 600px - 1200px **/
-@media (min-width: 600px) and (max-width: 1199px) {
+/** Screen size: 900px - 1200px **/
+@media (min-width: 900px) and (max-width: 1199px) {
+    .navBar, .mainContentBlock, .heroContent {
+        width: 100%;
+    }
+
+    .heroContent {
+        margin: 75px 0;
+    }
+
+    .attrBlocks {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+
+
+/** Screen size: 600px - 900px **/
+@media (min-width: 600px) and (max-width: 899px) {
     .navBar, .mainContentBlock, .heroContent {
         width: 100%;
     }
