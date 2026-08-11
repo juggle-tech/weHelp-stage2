@@ -1,15 +1,37 @@
+let nextPage = 0;
+let isLoading = false;
+let currentCategory = null;
+let currentKeyword = null;
+let observer;
+let sentinel;
 
-async function getAttractions() {
+async function getAttractions(page=nextPage, append=false) {
+    if (isLoading) return;
+    isLoading = true;
+
   try {
-    let response = await fetch("/api/attractions", {
-      method: "GET"
+    let url = "/api/attractions?page=" + nextPage;
+
+    if (currentCategory) {
+        url += "&category=" + encodeURIComponent(currentCategory);
+    }
+        
+    if (currentKeyword) {
+        url += "&keyword=" + encodeURIComponent(currentKeyword);
+    } 
+    
+    let response = await fetch(url, {
+        method: "GET"
     });
 
     let result = await response.json();
 
     if (!result.error) {
         let board = document.getElementById("attrBlocks");
-        board.innerHTML = "";
+
+        if (!append) {
+            board.innerHTML = "";
+        }
 
         result.data.forEach((attraction) => {
             let attrCard = document.createElement("a");
@@ -48,6 +70,15 @@ async function getAttractions() {
 
             board.appendChild(attrCard);
         });
+
+
+        // Update nextPage 
+        nextPage = result.nextPage;
+        if (nextPage === null) {
+            observer.unobserve(sentinel);
+        } else {
+            observer.observe(sentinel);
+        }
     
     } else {
       console.error("Error messages:", result.message);
@@ -55,7 +86,26 @@ async function getAttractions() {
 
   } catch (err) {
     console.error("Fetching attractions fails:", err);
+  } finally {
+    isLoading = false;
   }
 }
 
-getAttractions();
+
+function setupInfiniteScroll() {
+  sentinel = document.getElementById("footer");
+
+  observer = new IntersectionObserver((entries) => {
+    const entry = entries[0];
+    if (entry.isIntersecting && nextPage !== null && !isLoading) {
+      getAttractions(nextPage, true);
+    }
+  }, {
+    rootMargin: "200px"
+  });
+
+  observer.observe(sentinel);
+}
+
+setupInfiniteScroll();
+getAttractions(nextPage, false);
