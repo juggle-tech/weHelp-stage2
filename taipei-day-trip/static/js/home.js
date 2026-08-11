@@ -1,16 +1,27 @@
+/**
+ * Attraction list page.
+ * - Fetch and render attractions, filtered by category/keyword
+ * - Infinite scroll: auto-load next page near page bottom
+ * - Category menu: fetch and render all categories
+ * - MRT menu: fetch and render all MRT stations
+ */
+
+
+// Fetch and render qualified attractions
 let nextPage = 0;
 let isLoading = false;
 let currentCategory = null;
 let currentKeyword = null;
-let observer;
-let sentinel;
 
-async function getAttractions(page=nextPage, append=false) {
+async function getAttractions(page=0, append=false) {
+  console.log("Cate: " + currentCategory);
+  console.log("Key: " + currentKeyword);
+
   if (isLoading) return;
   isLoading = true;
 
   try {
-    let url = "/api/attractions?page=" + nextPage;
+    let url = "/api/attractions?page=" + page;
 
     if (currentCategory) {
       url += "&category=" + encodeURIComponent(currentCategory);
@@ -91,7 +102,11 @@ async function getAttractions(page=nextPage, append=false) {
   }
 }
 
+
 // Auto-loading more attractions
+let observer;
+let sentinel;
+
 function setupInfiniteScroll() {
   sentinel = document.getElementById("footer");
 
@@ -108,6 +123,7 @@ function setupInfiniteScroll() {
 }
 
 
+// Fetch and render all categories
 async function getCategories() {
   try {
     let response = await fetch("/api/categories", {
@@ -133,13 +149,46 @@ async function getCategories() {
       console.error("Error messages:", result.message);
     }
 
-
   } catch (err) {
     console.error("Fetching categories fails:", err);
   }
 }
 
-// Initilization
+
+// Fetch and render all MRTs
+async function getMRTs() {
+  try {
+    let response = await fetch("/api/mrts", {
+      method: "GET"
+    });
+
+    let result = await response.json();
+
+    if (!result.error) {
+      let mrtMenu = document.getElementById("mrtMenu");
+      
+      result.data.forEach((mrt) => {
+        let mrtLi = document.createElement("li");
+        mrtMenu.appendChild(mrtLi);
+        
+        let mrtBtn = document.createElement("button");
+        mrtBtn.type = "button";
+        mrtBtn.textContent = mrt;
+        mrtLi.appendChild(mrtBtn);
+      });
+
+    } else {
+      console.error("Error messages:", result.message);
+    }
+
+  } catch (err) {
+    console.error("Fetching MRTs fails:", err);
+  }
+}
+
+
+// Initialization
 setupInfiniteScroll();
-getAttractions(nextPage, false);
+getAttractions();
 getCategories();
+getMRTs();

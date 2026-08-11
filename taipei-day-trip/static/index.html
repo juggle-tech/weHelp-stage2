@@ -2,12 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
   <link href="./static/css/style.css" rel="stylesheet">
   <script src="./static/js/home.js" defer></script>
   <script src="./static/js/search.js" defer></script>
-  
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Taipei Day Trip</title>
 </head>
@@ -33,7 +30,7 @@
       <p>探索每個角落，體驗城市的深度旅遊行程</p>
 
       <!-- Search bar -->
-      <form class="searchBar">
+      <form id="searchBar" class="searchBar">
         <!-- Dropdown menu for categories -->
         <div class="searchDropdownWrapper">
           <button id="cateSearch" type="button" class="searchDropdown">全部分類▼</button>
@@ -44,7 +41,7 @@
         </div>
 
         <!-- Input for keywords -->
-        <input type="search" name="keyword" class="searchKeyword" placeholder=" 輸入景點名稱查詢">
+        <input id="keyword" type="search" name="keyword" class="searchKeyword" placeholder="輸入景點名稱查詢">
 
         <!-- Search button -->
         <button type="submit" class="searchBtn">
@@ -60,32 +57,16 @@
   <div class="mainContentBlock">
     <!-- MRT menu -->
     <div class="mrtBar">
-      <button type="button" class="leftBtn">
+      <button id="leftBtn" type="button" class="leftBtn">
         <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="11"></circle>
           <polyline points="13.5 8 9.5 12 13.5 16"></polyline>
         </svg>
       </button>
 
-      <ul class="mrtMenu">
-        <li><button type="button">劍潭</button></li>
-        <li><button type="button">圓山</button></li>
-        <li><button type="button">士林</button></li>
-        <li><button type="button">新北投</button></li>
-        <li><button type="button">台大醫院</button></li>
-        <li><button type="button">龍山寺</button></li>
-        <li><button type="button">西門</button></li>
-        <li><button type="button">動物園</button></li>
-        <li><button type="button">小南門</button></li>
-        <li><button type="button">雙連</button></li>
-        <li><button type="button">善導寺</button></li>
-        <li><button type="button">中山</button></li>
-        <li><button type="button">民權西路</button></li>
-        <li><button type="button">中正紀念堂</button></li>
-        <li><button type="button">關渡</button></li>
-      </ul>
+      <ul id="mrtMenu" class="mrtMenu"></ul>
 
-      <button type="button" class="rightBtn">
+      <button id="rightBtn" type="button" class="rightBtn">
         <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="11"></circle>
         <polyline points="10.5 8 14.5 12 10.5 16"></polyline>
