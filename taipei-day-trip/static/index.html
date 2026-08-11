@@ -12,23 +12,27 @@
   <title>Taipei Day Trip</title>
 </head>
 <body>
-  
-  <div class="navBar">
-    <a href="" class="logo">台北一日遊</a>
+  <!-- Navigation bar -->
+  <div class="header">
+    <div class="navBar">
+      <a href="" class="logo">台北一日遊</a>
 
-    <nav>
-      <ul class="menu">
-        <a href="">預定行程</a>
-        <a href="">登入/註冊</a>
-      </ul>
-    </nav>
+      <nav>
+        <ul class="menu">
+          <a href="">預定行程</a>
+          <a href="">登入/註冊</a>
+        </ul>
+      </nav>
+    </div>
   </div>
   
+  <!-- Hero section -->
   <div class="hero">
     <div class="heroContent">
       <h1>輕鬆享受台北一日悠閑</h1>
       <p>探索每個角落，體驗城市的深度旅遊行程</p>
 
+      <!-- Search bar -->
       <form class="searchBar">
         <!-- Dropdown menu for categories -->
         <div class="">
@@ -46,7 +50,7 @@
         <input type="search" name="keyword" class="searchKeyword" placeholder=" 輸入景點名稱查詢">
 
         <!-- Search button -->
-        <button type="submit" class="submitBtn">
+        <button type="submit" class="searchBtn">
           <svg viewBox="0 0 28 28" width="30" height="30" fill="none" stroke="#ffffff" stroke-width="3">
             <circle cx="12" cy="12" r="9"></circle>
             <line x1="18" y1="18" x2="26" y2="26"></line>
@@ -57,6 +61,7 @@
   </div>
 
   <div class="mainContentBlock">
+    <!-- MRT menu -->
     <div class="mrtBar">
       <button type="button" class="leftBtn">
         <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -80,6 +85,7 @@
         <li><button type="button">中山</button></li>
         <li><button type="button">民權西路</button></li>
         <li><button type="button">中正紀念堂</button></li>
+        <li><button type="button">關渡</button></li>
       </ul>
 
       <button type="button" class="rightBtn">
@@ -90,11 +96,12 @@
       </button>
     </div>
     
+    <!-- Attraction cards -->
     <div class="attrBlocks">
       <a href="" class="attrCard">
-        <div>
-          <img src="" alt="" class="attrImg">
-          <h3 class="attrTitle">Attraction Name</h3>
+        <div class="attrName">
+          <img src="images/welcomeImage.png" alt="">
+          <p>Attraction Name</p>
         </div>
         <div class="attrInfo">
           <span class="attrMrt">MRT station</span>
@@ -103,9 +110,9 @@
       </a>
 
       <a href="" class="attrCard">
-        <div>
-          <img src="" alt="" class="attrImg">
-          <h3 class="attrTitle">Attraction Name</h3>
+        <div class="attrName">
+          <img src="images/welcomeImage.png" alt="">
+          <p>Attraction Name</p>
         </div>
         <div class="attrInfo">
           <span class="attrMrt">MRT station</span>
@@ -114,9 +121,9 @@
       </a>
 
       <a href="" class="attrCard">
-        <div>
-          <img src="" alt="" class="attrImg">
-          <h3 class="attrTitle">Attraction Name</h3>
+        <div class="attrName">
+          <img src="images/welcomeImage.png" alt="">
+          <p>Attraction Name</p>
         </div>
         <div class="attrInfo">
           <span class="attrMrt">MRT station</span>
@@ -125,18 +132,31 @@
       </a>
 
       <a href="" class="attrCard">
-        <div>
-          <img src="" alt="" class="attrImg">
-          <h3 class="attrTitle">Attraction Name</h3>
+        <div class="attrName">
+          <img src="images/welcomeImage.png" alt="">
+          <p>Attraction Name</p>
         </div>
         <div class="attrInfo">
           <span class="attrMrt">MRT station</span>
           <span class="attrCate">Category</span>
         </div>
       </a>
+
+      <a href="" class="attrCard">
+        <div class="attrName">
+          <img src="images/welcomeImage.png" alt="">
+          <p>Attraction Name</p>
+        </div>
+        <div class="attrInfo">
+          <span class="attrMrt">MRT station</span>
+          <span class="attrCate">Category</span>
+        </div>
+      </a>
+
     </div>
   </div>
 
+  <!-- Footer -->
   <div class="footer">
     <p>COPYRIGHT &copy; 2021 台北一日遊</p>
   </div>
