@@ -1,0 +1,360 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-style: Bold;
+    font-size: 16px;
+}
+
+body {
+    font-family: Noto Sans TC;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/** Navigation Bar **/
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #ffffff;
+    padding: 10px 0px;
+}
+
+.navBar {
+    width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.logo {
+    font-weight: 700;
+    font-style: bold;
+    font-size: 30px;
+    text-decoration: none;
+    color: #448899;
+}
+
+.menu > a {
+    font-weight: 500;
+    text-decoration: none;
+    color: #666666;
+    padding: 10px;
+}
+
+
+/** Hero Section **/
+.hero {
+    background-image: url(/static/images/welcomeImage.png);
+    background-size: cover;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.heroContent {
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    padding: 10px;
+    margin: 75px 0;
+    gap: 25px;
+}
+
+.hero h1 {
+    box-shadow: 0px 0px 30px 0px #AABBCC;
+    font-size: 28px;
+    color: #FFFFFF;
+}
+
+.hero p {
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+/* Search bar */
+.searchBar {
+    height: 46px;
+    display: flex;
+    flex-direction: row;
+}
+
+.searchDropdown {
+    background-color: #EEEEEE;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px 0 0 5px;
+    font-weight: 500;
+    font-size: 16px;
+    height: 100%;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.searchDropdownWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.searchDropdownMenu {
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 10px 0;
+    gap: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 20px 0px #AABBCC;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 3;
+}
+
+.searchDropdownMenu.isOpen {
+    display: grid;
+}
+
+.searchDropdownMenu li button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-weight: 500;
+    font-size: 14px;
+    color: #000000;
+}
+
+.searchKeyword {
+    border: none;
+    padding: 15px;
+    font-weight: 700;
+    font-size: 16px;
+    height: 100%;
+    min-width: 0;
+}
+
+.searchKeyword:focus {
+    outline: none;
+}
+
+.searchBtn {
+    max-width: 60px;
+    background-color: #448899;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    padding: 8px 15px;
+    height: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+
+/** Attraction Block **/
+.mainContentBlock {
+    width: 1200px;
+    padding: 40px 0;
+}
+
+/* MRT Bar */
+.mrtBar {
+    display: flex;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.mrtMenu {
+    display: flex;
+    align-items: center;
+    padding: 10px 13px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.mrtMenu::-webkit-scrollbar {
+    display: none;
+}
+
+.leftBtn, .rightBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 9px 0 9px 15px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.leftBtn {
+    padding: 9px 0 9px 15px;
+}
+
+.rightBtn {
+    padding: 9px 15px 9px 0;
+}
+
+li {
+    list-style: none;
+    padding: 5px 15px;
+    flex-shrink: 0;
+}
+
+li button {
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    background: none;
+    white-space: nowrap;
+    color: #666666;
+    cursor: pointer;
+    transition: color 0.2s, font-size 0.2s;
+}
+
+.mrtMenu li > button:hover {
+    color: #4d4d4d;
+    text-decoration: underline;
+}
+
+
+/* Attraction Block */
+.attrBlocks {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    padding: 15px;
+}
+
+.attrCard { 
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    background: #FFFFFF;
+    border: 1px solid #E8E8E8;
+}
+
+.attrName {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 242px;
+    border-radius: 5px 5px 0 0;
+    border-width: 1px;
+    overflow: hidden;
+
+}
+
+.attrName img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.attrName p {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+    padding: 10px;
+    background: #00000099;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.attrInfo {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    color: #757575;
+    padding: 10px;
+    gap: 4px;
+}
+
+
+/** Footer **/
+.footer {
+    width: 100%;
+    background: #757575;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.footer p {
+    font-weight: 700;
+    padding: 5px 0;
+    color: #FFFFFF;
+}
+
+
+
+/** Screen size: 900px - 1200px **/
+@media (min-width: 900px) and (max-width: 1199px) {
+    .navBar, .mainContentBlock, .heroContent {
+        width: 100%;
+    }
+
+    .heroContent {
+        margin: 75px 0;
+    }
+
+    .attrBlocks {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+
+
+/** Screen size: 600px - 900px **/
+@media (min-width: 600px) and (max-width: 899px) {
+    .navBar, .mainContentBlock, .heroContent {
+        width: 100%;
+    }
+
+    .heroContent {
+        margin: 75px 0;
+    }
+
+    .attrBlocks {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+
+/** Screen size: < 600px **/
+@media (max-width: 600px) {
+    .navBar, .mainContentBlock, .heroContent {
+        width: 100%;
+    }
+
+    .heroContent {
+        margin: 75px 10px;
+    }
+
+    .attrBlocks {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

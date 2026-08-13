@@ -2,10 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link href="./static/css/style.css" rel="stylesheet">
+  <script src="./static/js/home.js" defer></script>
+  <script src="./static/js/search.js" defer></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Index</title>
+  <title>Taipei Day Trip</title>
 </head>
 <body>
+  <!-- Navigation bar -->
+  <div class="header">
+    <div class="navBar">
+      <a href="" class="logo">台北一日遊</a>
+
+      <nav>
+        <ul class="menu">
+          <a href="">預定行程</a>
+          <a href="">登入/註冊</a>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  
+  <!-- Hero section -->
+  <div class="hero">
+    <div class="heroContent">
+      <h1>輕鬆享受台北一日悠閑</h1>
+      <p>探索每個角落，體驗城市的深度旅遊行程</p>
+
+      <!-- Search bar -->
+      <form id="searchBar" class="searchBar">
+        <!-- Dropdown menu for categories -->
+        <div class="searchDropdownWrapper">
+          <button id="cateSearch" type="button" class="searchDropdown">全部分類▼</button>
+
+          <ul id="cateMenu" class="searchDropdownMenu">
+            <li><button type="button">全部分類</button></li>
+          </ul>
+        </div>
+
+        <!-- Input for keywords -->
+        <input id="keyword" type="search" name="keyword" class="searchKeyword" placeholder="輸入景點名稱查詢">
+
+        <!-- Search button -->
+        <button type="submit" class="searchBtn">
+          <svg viewBox="0 0 28 28" width="30" height="30" fill="none" stroke="#ffffff" stroke-width="3">
+            <circle cx="12" cy="12" r="9"></circle>
+            <line x1="18" y1="18" x2="26" y2="26"></line>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="mainContentBlock">
+    <!-- MRT menu -->
+    <div class="mrtBar">
+      <button id="leftBtn" type="button" class="leftBtn">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="11"></circle>
+          <polyline points="13.5 8 9.5 12 13.5 16"></polyline>
+        </svg>
+      </button>
+
+      <ul id="mrtMenu" class="mrtMenu"></ul>
+
+      <button id="rightBtn" type="button" class="rightBtn">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#999999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="11"></circle>
+        <polyline points="10.5 8 14.5 12 10.5 16"></polyline>
+      </svg>
+      </button>
+    </div>
+    
+    <!-- Attraction cards -->
+    <div id="attrBlocks" class="attrBlocks"></div>
+
+  </div>
+
+  <!-- Footer -->
+  <div id="footer" class="footer">
+    <p>COPYRIGHT &copy; 2021 台北一日遊</p>
+  </div>
   
 </body>
 </html>
