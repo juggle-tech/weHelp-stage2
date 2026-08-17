@@ -54,6 +54,8 @@ body {
 }
 
 
+
+/*** index.html ***/
 /** Hero Section **/
 .hero {
     background-image: url(/static/images/welcomeImage.png);
@@ -154,7 +156,7 @@ body {
     outline: none;
 }
 
-.searchBtn {
+.searchBtn, .bookBtn {
     max-width: 60px;
     background-color: #448899;
     border: none;
@@ -194,7 +196,7 @@ body {
     display: none;
 }
 
-.leftBtn, .rightBtn {
+.leftBtn, .rightBtn{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -261,7 +263,6 @@ li button {
     border-radius: 5px 5px 0 0;
     border-width: 1px;
     overflow: hidden;
-
 }
 
 .attrName img {
@@ -292,6 +293,62 @@ li button {
     padding: 10px;
     gap: 4px;
 }
+
+
+
+/*** Attraction.html  ***/
+.bookingBlock {
+    width: 1200px;
+    height: 400px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 30px;
+    padding: 20px;
+}
+
+.slideShow {
+    width: 540px;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    border-radius: 5px;
+    background-image: url("https://padax.github.io/taipei-day-trip-resources/imgs/1-0.jpg");
+    background-size: cover;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+.bookingForm {
+}
+
+.leftBtnSlide, .rightBtnSlide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.leftBtnSlide:hover circle, .rightBtnSlide:hover circle {
+    fill: #222222;
+    stroke: #ffffff;
+    transition: fill 0.2s ease;
+    
+}
+
+.leftBtnSlide:hover polyline, .rightBtnSlide:hover polyline {
+    stroke: #ffffff;
+    transition: stroke 0.2s ease;
+}
+
+.bookBtn {
+
+}
+
 
 
 /** Footer **/
