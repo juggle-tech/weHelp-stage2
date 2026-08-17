@@ -156,7 +156,7 @@ body {
     outline: none;
 }
 
-.searchBtn, .bookBtn {
+.searchBtn {
     max-width: 60px;
     background-color: #448899;
     border: none;
@@ -238,7 +238,7 @@ li button {
 }
 
 
-/* Attraction Block */
+/* Attraction block */
 .attrBlocks {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -297,30 +297,38 @@ li button {
 
 
 /*** Attraction.html  ***/
+.attrHeader {
+    border-bottom: 1px solid #E8E8E8;
+}
+
+
+/** Booking Block **/
 .bookingBlock {
     width: 1200px;
     height: 400px;
+    margin: 40px 0;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin: 30px;
-    padding: 20px;
+    align-items: flex-start;
+    justify-content:flex-start;
+    padding: 0 15px;
+    gap: 30px;
+    border: 1px solid red;
 }
 
+/* Slide show */
 .slideShow {
+    border: 1px solid blue;
     width: 540px;
     height: 100%;
-    display: flex;
-    flex-direction: row;
     border-radius: 5px;
     background-image: url("https://padax.github.io/taipei-day-trip-resources/imgs/1-0.jpg");
     background-size: cover;
-    justify-content: space-between;
-    padding: 15px;
 }
 
-.bookingForm {
+.slideShowBtns {
+    height: 98%;
+    display: flex;
+    justify-content: space-between;
 }
 
 .leftBtnSlide, .rightBtnSlide {
@@ -331,6 +339,7 @@ li button {
     background: none;
     border: none;
     cursor: pointer;
+    border: 1px solid orange;
 }
 
 .leftBtnSlide:hover circle, .rightBtnSlide:hover circle {
@@ -345,9 +354,116 @@ li button {
     transition: stroke 0.2s ease;
 }
 
-.bookBtn {
-
+.indicator {
+    height: 2%;
+    border-radius: 0 0 5px 5px;
+    background-color:#FFFFFF;
+    border: 1px solid brown;
 }
+
+
+/* Booking form */
+.booking{
+    color: #666666;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    border: 1px solid green;
+}
+
+.booking h3 {
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 24px;
+}
+
+.booking p {
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.booking form {
+    display: flex;
+    flex-direction: column;
+    font-weight: 400;
+    gap: 15px;
+}
+
+.bookingForm {
+    background-color: #E8E8E8;
+    border-radius: 5px;
+    padding: 15px 20px;
+    gap: 15px;
+}
+
+.bookingForm span, .dateSelect label {
+    font-weight: 700;
+    font-style: Bold;
+}
+
+.timeSelectDiv {
+    display: flex;
+    align-items: center;
+}
+
+.timeSelect {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 5px;
+}
+
+input[type="radio"] {
+    accent-color: #448899;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+}
+
+input[type="radio"]:checked::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #448899;
+}
+
+.fee {
+    display: flex;
+    align-items: center;
+}
+
+.fee p {
+    padding: 0 5px;
+}
+
+.bookBtn {
+    background-color: #448899;
+    border: none;
+    color: #FFFFFF;
+    font-size: 19px;
+    cursor: pointer;
+    width: fit-content;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 5px;
+}
+
+hr {
+    color: #E8E8E8;
+    width: 1200px;
+}
+
+/** Attraction Details **/
 
 
 
@@ -380,6 +496,11 @@ li button {
     .attrBlocks {
         grid-template-columns: repeat(3, 1fr);
     }
+
+    .bookingBlock {
+        width: 100%;
+        margin: 20px 0;
+    }
 }
 
 
@@ -397,6 +518,11 @@ li button {
     .attrBlocks {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .bookingBlock {
+        width: 100%;
+        margin: 20px 0;
+    }
 }
 
 
@@ -413,5 +539,12 @@ li button {
 
     .attrBlocks {
         grid-template-columns: repeat(1, 1fr);
+    }
+
+    .bookingBlock {
+        width: 100%;
+        margin: 0 0 20px 0;
+        display: flex;
+        flex-direction: column;
     }
 }

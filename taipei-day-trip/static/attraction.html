@@ -9,7 +9,7 @@
 </head>
 <body>
   <!-- Navigation bar -->
-  <div class="header">
+  <div class="header attrHeader">
     <div class="navBar">
       <a href="/" class="logo">台北一日遊</a>
 
@@ -21,35 +21,58 @@
       </nav>
     </div>
   </div>
-
-  <hr>
   
   <!-- Images and Booking form section -->
   <div class="bookingBlock">
     <div class="slideShow">
-      <button id="leftBtnSlide" type="button" class="leftBtnSlide">
-        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="11" fill="white" opacity="0.75" stroke="none"></circle>
-          <polyline points="13.5 8 9.5 12 13.5 16"></polyline>
-        </svg>
-      </button>
+      <div class="slideShowBtns">
+        <button id="leftBtnSlide" type="button" class="leftBtnSlide">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="11" fill="white" opacity="0.75" stroke="none"></circle>
+            <polyline points="13.5 8 9.5 12 13.5 16"></polyline>
+          </svg>
+        </button>
 
-      <button id="rightBtnSlide" type="button" class="rightBtnSlide">
-        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="11" fill="white" opacity="0.75" stroke="none"></circle>
-          <polyline points="10.5 8 14.5 12 10.5 16"></polyline>
-        </svg>
-      </button>
+        <button id="rightBtnSlide" type="button" class="rightBtnSlide">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="11" fill="white" opacity="0.75" stroke="none"></circle>
+            <polyline points="10.5 8 14.5 12 10.5 16"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="indicator"></div>
     </div>
-
-    <div class="bookingForm">
-      <h2>平安鐘</h2>
+  
+    <div class="booking">
+      <h3>平安鐘</h3>
       <p>公共藝術 at 忠孝復興</p>
+      
       <!-- Booking form -->
-      <form id="" class="">
-
+      <form id="" class="bookingForm">
         <!-- Input for Date and Time -->
-        <input id="" type="" name="" class="" >
+        <span>訂購導覽行程</span>
+        <p>以此景點為中心的一日行程，帶您探索城市角落故事</p>
+        
+        <div class="dateSelect">
+          <label for="date">選擇日期：</label>
+          <input type="date" id="date" name="date" required>
+        </div>
+        
+        <div class="timeSelectDiv">
+          <span>選擇時間：</span>
+          <label class="timeSelect">
+            <input type="radio" name="time" value="morning" checked>上半天
+          </label>
+          <label class="timeSelect">
+            <input type="radio" name="time" value="afternoon">下半天
+          </label>
+        </div>
+         
+        <div class="fee">
+          <span>導覽費用：</span>
+          <p> 新台幣 2000 元</p>
+        </div>
 
         <!-- Booking button -->
         <button type="submit" class="bookBtn">
@@ -59,17 +82,19 @@
     </div>
   </div>
 
+  <hr>
+
   <!-- Attraction details -->
-   <div>
-    <p></p>
+  <div class="attrDetail">
+    <p>平安鐘祈求大家的平安，這是為了紀念921地週年的設計，在喧鬧的廣場上每個小時鳴鐘，保佑平安，祈禱臺灣不會再發生這樣的天災。雙手合十加上108個黃色的琉璃乳丁，隨著緩緩流下的水，在底下的一個小噴泉噴出。雙手合十的意義，一個是祈福，一個是包容，教我們要包容這樣的改變，撫平這樣的傷口。下面的水緩緩流出，代表著人的生命力是不斷地延續下去。緩緩地鐘聲，卻帶來心中的寧靜。這個平安鐘是由建築師姚仁喜與琉璃創作家王俠軍共同設計，長6公尺、寬5公尺，以鑄銅製成，由法鼓山文教基金會全額出資。平安鐘點綴都市景觀，不時提醒大家，面對刻骨銘心的災難痛苦，更應該有謙卑的一顆心。</p>
 
     <h3>景點地址：</h3>
-    <p></p>
+    <p>臺北市 大安區忠孝東路4段</p>
 
     <h3>交通方式：</h3>
-    <p></p>
+    <p>捷運站名：忠孝復興站4號出口1.公車：204、212、212直、232、232副、262、262（區間）、278、299、521、605、605（副）、605（新台五線）、667、903、忠孝新幹線至頂好市場站2.車位：太平洋崇光百貨地下停車場或市民大道附近地下停車場</p>
 
-   </div>
+  </div>
 
   <!-- Footer -->
   <div id="footer" class="footer">
