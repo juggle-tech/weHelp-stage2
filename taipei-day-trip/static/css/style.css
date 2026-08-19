@@ -340,6 +340,7 @@ li button {
     border: none;
     cursor: pointer;
     border: 1px solid orange;
+    margin: 10px;
 }
 
 .leftBtnSlide:hover circle, .rightBtnSlide:hover circle {
@@ -370,6 +371,8 @@ li button {
     justify-content: center;
     gap: 15px;
     border: 1px solid green;
+    flex: 1;
+    min-width: 0;
 }
 
 .booking h3 {
@@ -460,11 +463,28 @@ input[type="radio"]:checked::before {
 
 hr {
     color: #E8E8E8;
-    width: 1200px;
+    width: 1180px;
+    margin: 20px auto;
 }
 
 /** Attraction Details **/
+.attrDetail {
+    width: 1200px;
+    font-weight: 400;
+    font-size: 16px;
+    color: #666666;
+    padding: 10px;
+    margin: 20px 10px;
+    border: 1px solid orange;
+}
 
+.attrDetail h3 {
+    line-height: 1.8;
+}
+
+.attrDetail p {
+    margin-bottom: 30px;
+}
 
 
 /** Footer **/
@@ -485,7 +505,7 @@ hr {
 
 /** Screen size: 900px - 1200px **/
 @media (min-width: 900px) and (max-width: 1199px) {
-    .navBar, .mainContentBlock, .heroContent {
+    .navBar, .mainContentBlock, .heroContent, .attrDetail {
         width: 100%;
     }
 
@@ -501,13 +521,21 @@ hr {
         width: 100%;
         margin: 20px 0;
     }
+
+    .slideShow {
+        width: 50%;
+    }
+
+    hr {
+        width: calc(100% - 20px);
+    }
 }
 
 
 
 /** Screen size: 600px - 900px **/
 @media (min-width: 600px) and (max-width: 899px) {
-    .navBar, .mainContentBlock, .heroContent {
+    .navBar, .mainContentBlock, .heroContent, .attrDetail {
         width: 100%;
     }
 
@@ -522,6 +550,18 @@ hr {
     .bookingBlock {
         width: 100%;
         margin: 20px 0;
+        height: auto;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .slideShow {
+        width: 100%;
+        height: auto;
+    }
+
+    hr {
+        width: calc(100% - 20px);
     }
 }
 
@@ -529,7 +569,7 @@ hr {
 
 /** Screen size: < 600px **/
 @media (max-width: 600px) {
-    .navBar, .mainContentBlock, .heroContent {
+    .navBar, .mainContentBlock, .heroContent, .attrDetail, .attrDetail {
         width: 100%;
     }
 
@@ -546,5 +586,16 @@ hr {
         margin: 0 0 20px 0;
         display: flex;
         flex-direction: column;
+        height: auto;
+    }
+
+    .slideShow {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 540 / 400;
+    }
+
+    hr {
+        width: calc(100% - 20px);
     }
 }
