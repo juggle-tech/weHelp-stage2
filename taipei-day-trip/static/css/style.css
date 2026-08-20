@@ -414,6 +414,10 @@ li button {
     font-style: Bold;
 }
 
+.dateInput {
+    padding: 5px;
+}
+
 .timeSelectDiv {
     display: flex;
     align-items: center;
