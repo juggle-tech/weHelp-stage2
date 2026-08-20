@@ -237,7 +237,6 @@ li button {
     text-decoration: underline;
 }
 
-
 /* Attraction block */
 .attrBlocks {
     display: grid;
@@ -311,17 +310,16 @@ li button {
     justify-content:flex-start;
     padding: 0 15px;
     gap: 30px;
-    border: 1px solid red;
 }
 
 /* Slide show */
 .slideShow {
-    border: 1px solid blue;
     width: 540px;
     border-radius: 5px;
-    background-image: url("https://padax.github.io/taipei-day-trip-resources/imgs/1-0.jpg");
     background-size: cover;
     position: relative;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .slideShowBtns {
@@ -338,7 +336,6 @@ li button {
     background: none;
     border: none;
     cursor: pointer;
-    border: 1px solid orange;
     margin: 10px;
 }
 
@@ -356,16 +353,25 @@ li button {
 
 .indicator {
     position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 0;
+    left: 0;
     display: flex;
-    gap: 6px;
-    width: 90%;
-    background: transparent;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
     border: none;
 }
 
+.item {
+    flex: 1;
+    height: 6px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.item.active {
+    background-color: #000000;
+}
 
 /* Booking form */
 .booking {
@@ -373,7 +379,6 @@ li button {
     display:flex;
     flex-direction: column;
     gap: 15px;
-    border: 1px solid green;
     flex: 1;
     min-width: 0;
 }
@@ -471,6 +476,7 @@ hr {
     margin: 20px auto;
 }
 
+
 /** Attraction Details **/
 .attrDetail {
     width: 1200px;
@@ -479,7 +485,6 @@ hr {
     color: #666666;
     padding: 10px;
     margin: 20px 10px;
-    border: 1px solid orange;
 }
 
 .attrDetail h3 {
