@@ -57,11 +57,11 @@ const mrtMenu = document.getElementById("mrtMenu");
 const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
 
-leftBtn.addEventListener("click", () => {
+leftBtn.addEventListener('click', () => {
   mrtMenu.scrollBy({ left: -350, behavior: "smooth" });
 });
 
-rightBtn.addEventListener("click", () => {
+rightBtn.addEventListener('click', () => {
   mrtMenu.scrollBy({ left: 350, behavior: "smooth" });
 });
 
