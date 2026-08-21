@@ -54,6 +54,8 @@ body {
 }
 
 
+
+/*** index.html ***/
 /** Hero Section **/
 .hero {
     background-image: url(/static/images/welcomeImage.png);
@@ -194,7 +196,7 @@ body {
     display: none;
 }
 
-.leftBtn, .rightBtn {
+.leftBtn, .rightBtn{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -235,8 +237,7 @@ li button {
     text-decoration: underline;
 }
 
-
-/* Attraction Block */
+/* Attraction block */
 .attrBlocks {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -261,7 +262,6 @@ li button {
     border-radius: 5px 5px 0 0;
     border-width: 1px;
     overflow: hidden;
-
 }
 
 .attrName img {
@@ -294,6 +294,212 @@ li button {
 }
 
 
+
+/*** Attraction.html  ***/
+.attrHeader {
+    border-bottom: 1px solid #E8E8E8;
+}
+
+
+/** Booking Block **/
+.bookingBlock {
+    width: 1200px;
+    margin: 40px 0 20px 0;
+    display: flex;
+    align-items: stretch;
+    justify-content:flex-start;
+    padding: 0 15px;
+    gap: 30px;
+}
+
+/* Slide show */
+.slideShow {
+    width: 540px;
+    border-radius: 5px;
+    background-size: cover;
+    position: relative;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.slideShowBtns {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.leftBtnSlide, .rightBtnSlide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.leftBtnSlide:hover circle, .rightBtnSlide:hover circle {
+    fill: #222222;
+    stroke: #ffffff;
+    transition: fill 0.2s ease;
+    
+}
+
+.leftBtnSlide:hover polyline, .rightBtnSlide:hover polyline {
+    stroke: #ffffff;
+    transition: stroke 0.2s ease;
+}
+
+.indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+}
+
+.item {
+    flex: 1;
+    height: 6px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.item.active {
+    background-color: #000000;
+}
+
+/* Booking form */
+.booking {
+    color: #666666;
+    display:flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1;
+    min-width: 0;
+}
+
+.booking h3 {
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 24px;
+}
+
+.booking p {
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.booking form {
+    display: flex;
+    flex-direction: column;
+    font-weight: 400;
+    gap: 15px;
+}
+
+.bookingForm {
+    margin-top: auto;
+    background-color: #E8E8E8;
+    border-radius: 5px;
+    padding: 15px 20px;
+    gap: 15px;
+}
+
+.bookingForm span, .dateSelect label {
+    font-weight: 700;
+    font-style: Bold;
+}
+
+.dateInput {
+    padding: 5px;
+}
+
+.timeSelectDiv {
+    display: flex;
+    align-items: center;
+}
+
+.timeSelect {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 5px;
+}
+
+input[type="radio"] {
+    accent-color: #448899;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+}
+
+input[type="radio"]:checked::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #448899;
+}
+
+.fee {
+    display: flex;
+    align-items: center;
+}
+
+.fee p {
+    padding: 0 5px;
+}
+
+.bookBtn {
+    background-color: #448899;
+    border: none;
+    color: #FFFFFF;
+    font-size: 19px;
+    cursor: pointer;
+    width: fit-content;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 5px;
+}
+
+hr {
+    color: #E8E8E8;
+    width: 1180px;
+    margin: 20px auto;
+}
+
+
+/** Attraction Details **/
+.attrDetail {
+    width: 1200px;
+    font-weight: 400;
+    font-size: 16px;
+    color: #666666;
+    padding: 10px;
+    margin: 20px 10px;
+}
+
+.attrDetail h3 {
+    line-height: 1.8;
+}
+
+.attrDetail p {
+    margin-bottom: 30px;
+}
+
+
 /** Footer **/
 .footer {
     width: 100%;
@@ -312,7 +518,7 @@ li button {
 
 /** Screen size: 900px - 1200px **/
 @media (min-width: 900px) and (max-width: 1199px) {
-    .navBar, .mainContentBlock, .heroContent {
+    .navBar, .mainContentBlock, .heroContent, .attrDetail {
         width: 100%;
     }
 
@@ -323,13 +529,26 @@ li button {
     .attrBlocks {
         grid-template-columns: repeat(3, 1fr);
     }
+
+    .bookingBlock {
+        width: 100%;
+        margin: 20px 0;
+    }
+
+    .slideShow {
+        width: 50%;
+    }
+
+    hr {
+        width: calc(100% - 20px);
+    }
 }
 
 
 
 /** Screen size: 600px - 900px **/
 @media (min-width: 600px) and (max-width: 899px) {
-    .navBar, .mainContentBlock, .heroContent {
+    .navBar, .mainContentBlock, .heroContent, .attrDetail {
         width: 100%;
     }
 
@@ -340,14 +559,40 @@ li button {
     .attrBlocks {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .bookingBlock {
+        width: 100%;
+        margin: 20px 0;
+        height: auto;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .slideShow {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+    }
+
+    .booking {
+        width: 100%;
+    }
+
+    hr {
+        width: calc(100% - 20px);
+    }
 }
 
 
 
 /** Screen size: < 600px **/
 @media (max-width: 600px) {
-    .navBar, .mainContentBlock, .heroContent {
+    .navBar, .mainContentBlock, .heroContent, .attrDetail, .attrDetail {
         width: 100%;
+    }
+
+    .menu > a {
+        padding: 10px 5px;
     }
 
     .heroContent {
@@ -356,5 +601,31 @@ li button {
 
     .attrBlocks {
         grid-template-columns: repeat(1, 1fr);
+    }
+
+    .bookingBlock {
+        width: 100%;
+        margin: 0 0 20px 0;
+        padding: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+    }
+
+    .slideShow {
+        position: relative;
+        width: 100%;
+        padding: 0;
+        aspect-ratio: 1 / 1;
+    }
+
+    .booking {
+        width: 100%;
+        padding: 0px 10px;
+    }
+
+    hr {
+        width: calc(100% - 20px);
     }
 }

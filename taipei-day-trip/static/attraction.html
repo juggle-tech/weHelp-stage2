@@ -2,10 +2,104 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link href="/static/css/style.css" rel="stylesheet">
+  <script src="/static/js/attraction.js" defer></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attraction</title>
 </head>
 <body>
+  <!-- Navigation bar -->
+  <div class="header attrHeader">
+    <div class="navBar">
+      <a href="/" class="logo">台北一日遊</a>
+
+      <nav>
+        <ul class="menu">
+          <a href="">預定行程</a>
+          <a href="">登入/註冊</a>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  
+  <!-- Images and Booking form section -->
+  <div class="bookingBlock">
+    <div id="slideShow" class="slideShow">
+      <div class="slideShowBtns">
+        <button id="leftBtnSlide" type="button" class="leftBtnSlide">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="11" fill="white" opacity="0.75" stroke="none"></circle>
+            <polyline points="13.5 8 9.5 12 13.5 16"></polyline>
+          </svg>
+        </button>
+
+        <button id="rightBtnSlide" type="button" class="rightBtnSlide">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="11" fill="white" opacity="0.75" stroke="none"></circle>
+            <polyline points="10.5 8 14.5 12 10.5 16"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div id="indicator" class="indicator"></div>
+    </div>
+  
+    <div class="booking">
+      <h3 id="attrName"></h3>
+      <p id="attrCate"></p>
+      
+      <!-- Booking form -->
+      <form id="" class="bookingForm">
+        <!-- Input for Date and Time -->
+        <span>訂購導覽行程</span>
+        <p>以此景點為中心的一日行程，帶您探索城市角落故事</p>
+        
+        <div class="dateSelect">
+          <label for="date">選擇日期：</label>
+          <input type="date" id="date" name="date" class="dateInput" required>
+        </div>
+        
+        <div class="timeSelectDiv">
+          <span>選擇時間：</span>
+          <label class="timeSelect">
+            <input type="radio" name="time" value="morning" checked>上半天
+          </label>
+          <label class="timeSelect">
+            <input type="radio" name="time" value="afternoon">下半天
+          </label>
+        </div>
+         
+        <div class="fee">
+          <span>導覽費用：</span>
+          <p id="fee"> 新台幣 2000 元</p>
+        </div>
+
+        <!-- Booking button -->
+        <button type="submit" class="bookBtn">
+          <p>開始預訂行程</p>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Attraction details -->
+  <div class="attrDetail">
+    <p id="attrDescrip"></p>
+
+    <h3>景點地址：</h3>
+    <p id="attrAddr"></p>
+
+    <h3>交通方式：</h3>
+    <p id="attrTrans"></p>
+
+  </div>
+
+  <!-- Footer -->
+  <div id="footer" class="footer">
+    <p>COPYRIGHT &copy; 2021 台北一日遊</p>
+  </div>
   
 </body>
 </html>

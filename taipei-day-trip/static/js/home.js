@@ -14,10 +14,8 @@ let currentCategory = null;
 let currentKeyword = null;
 
 async function getAttractions(page=0, append=false) {
-  console.log("Cate: " + currentCategory);
-  console.log("Key: " + currentKeyword);
+  if (isLoading) { return; }
 
-  if (isLoading) return;
   isLoading = true;
 
   try {
