@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <link href="/static/css/style.css" rel="stylesheet">
+  <script src="/static/js/script.js" defer></script>
   <script src="/static/js/attraction.js" defer></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attraction</title>
@@ -16,10 +17,36 @@
       <nav>
         <ul class="menu">
           <a href="">預定行程</a>
-          <a href="">登入/註冊</a>
+          <a id="signInStatus" href="">登入/註冊</a>
         </ul>
       </nav>
     </div>
+  </div>
+
+  <!-- Pop-up Dialogue: Sign in / Sign up -->
+  <div class="signin">
+    <div></div>
+    <form id="signinForm">
+      <h3>登入會員帳號</h3>
+      <input type="text" id="emailSignin" name="email" placeholder="輸入電子信箱">
+      <input type="password" id="passwordSignin" name="password" placeholder="輸入密碼">
+      <button type="button" class="signinBtn">登入帳戶</button>
+      <p>還沒有帳戶？<a id="signinText">點此註冊</a></p>
+      <p class="errorMsg" id="signinError"></p>
+    </form>
+  </div>
+
+  <div class="signup">
+    <div></div>
+    <form id="signupForm">
+      <h3>註冊會員帳號</h3>
+      <input type="text" id="name" name="name" placeholder="輸入姓名">
+      <input type="text" id="emailSignup" name="email" placeholder="輸入電子信箱">
+      <input type="password" id="passwordSignup" name="password" placeholder="輸入密碼">
+      <button type="button" class="signupBtn">註冊新帳戶</button>
+      <p>已經有帳戶了？<a id="signupText">點此登入</a></p>
+      <p class="errorMsg" id="signupError"></p>
+    </form>
   </div>
   
   <!-- Images and Booking form section -->

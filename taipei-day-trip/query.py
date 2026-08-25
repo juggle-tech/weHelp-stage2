@@ -1,10 +1,9 @@
-from itertools import chain
-import json
-from operator import itemgetter
+import hashlib
+import secrets
 from typing import Counter
 
 from sqlmodel import func, or_, select
-from model import Attraction
+from model import Attraction, User
 
 PAGE_SIZE = 8
 
@@ -63,3 +62,24 @@ def get_ordered_mrts(session):
     sorted_mrts = [station for station, count in mrts.most_common()]
 
     return sorted_mrts
+
+
+def get_user_by_email(session, email):
+
+    stat = select(User).where(User.email == email)
+    return session.exec(stat).first
+
+
+def create_user(session, name, email, password):
+
+    hashed_pwd = hash_password(password)
+    user = User(name=name, email=email, password=hashed_pwd)
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
+
+
+def hash_password(password):
+    salt = secrets.token_hex(8)
+    return hashlib.sha256(f"{password}|{salt}".encode()).hexdigest()
