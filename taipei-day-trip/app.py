@@ -6,12 +6,12 @@ from fastapi import *
 from fastapi.responses import FileResponse, JSONResponse
 from dotenv import load_dotenv
 from fastapi.staticfiles import StaticFiles
-from sqlmodel import SQLModel, Session
+from sqlmodel import Field, SQLModel, Session
 from database import SessionDep, engine, create_database_if_not_exists
 from load_data import load_attractions_if_updated
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone, timedelta
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from jwt import ExpiredSignatureError, InvalidTokenError
 
 load_dotenv()
@@ -142,20 +142,21 @@ async def get_mrts(request: Request, session: SessionDep):
 
 # User
 class SigninInput(BaseModel):
-    email: str = ""
-    password: str = ""
+    email: str = Field(..., examples=["jung@example.com"])
+    password: str = Field(..., examples=["jung"])
 
 class SignupInput(BaseModel):
-    name: str = ""
-    email: str = ""
-    password: str = ""
+    name: str = Field(..., examples=["Jung"])
+    email: str = Field(..., examples=["jung@example.com"])
+    password: str = Field(..., examples=["jung"])
 
 
 @app.post("/api/user")
 async def signup(request: Request, session: SessionDep, body: SignupInput):
     try:
-        if not query.get_user_by_email(body.email):
-            user = query.create_user(session, body.name, body.email, body.password)
+        print(query.get_user_by_email(session, body.email))
+        if not query.get_user_by_email(session, body.email):
+            query.create_user(session, body.name, body.email, body.password)
             return {"ok": True}
         else:
             return JSONResponse(
@@ -195,8 +196,8 @@ async def signin(session: SessionDep, body: SigninInput):
     try:
         user = query.get_user_by_email(session, body.email);
         # Verify that the user has signed in successfully
-        if user and query.hashed_password(body.password) == user.password:
-            payload = {"id": str(user.id), "email": user.email, "name": user.name, "iat": datetime.now(datetime.timezone.utc), 
+        if user and query.verify_password(body.password, user.password):
+            payload = {"id": str(user.id), "email": user.email, "name": user.name, "iat": datetime.now(timezone.utc), 
                     "exp": datetime.now(timezone.utc) + timedelta(days=7)}
             encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
             return JSONResponse(

@@ -67,7 +67,7 @@ def get_ordered_mrts(session):
 def get_user_by_email(session, email):
 
     stat = select(User).where(User.email == email)
-    return session.exec(stat).first
+    return session.exec(stat).first()
 
 
 def create_user(session, name, email, password):
@@ -80,6 +80,13 @@ def create_user(session, name, email, password):
     return user
 
 
-def hash_password(password):
-    salt = secrets.token_hex(8)
-    return hashlib.sha256(f"{password}|{salt}".encode()).hexdigest()
+def hash_password(password, salt=None):
+    if salt is None:
+        salt = secrets.token_hex(8)
+    hashed_pwd = hashlib.sha256(f"{password}|{salt}".encode()).hexdigest()
+    return f"{salt}${hashed_pwd}"
+
+
+def verify_password(password, stored_pwd):
+    salt, hashed_pwd = stored_pwd.split("$")
+    return hash_password(password, salt) == stored_pwd

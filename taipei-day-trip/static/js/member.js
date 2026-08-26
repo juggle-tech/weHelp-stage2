@@ -1,11 +1,11 @@
 /**
- * Sign in / sign up pop-up dialog
- * - Toggle open/close of signin and signup pop-up dialogs
- * - Switch between signin form and signup form
- * - User sign in: submit credentials and store token
- * - User sign up: submit new account and show result message
+ * Sign in / sign up pop-up dialog and login status management
+ * - Toggle signin/signup pop-ups and switch between them
+ * - Sign in: Store JWT token
+ * - Sign up: Create account and show result message
+ * - Check login status on page load
+ * - Sign out: Clear token and reload page
  */
-
 
 
 // User sign in 
@@ -33,10 +33,10 @@ document.getElementById("signinBtn").addEventListener("click", async function() 
             localStorage.setItem("token", result.token);
             location.reload();
             document.getElementById("signInStatus").textContent = "登出系統";
-            // document.getElementById("signinError").textContent = "";
+            document.getElementById("signinError").textContent = "";
         } else {
             // Show error message
-            document.getElementById("signinError").textContent = "帳號或密碼輸入錯誤";
+            document.getElementById("signinError").textContent = result.message;
         }
     } catch (err) {
         console.error("Sign in fails:", err);
@@ -72,7 +72,7 @@ document.getElementById("signupBtn").addEventListener("click", async function() 
             document.getElementById("signupError").textContent = "";
         } else {
             // Show error message
-            document.getElementById("signupError").textContent = "帳號或密碼輸入錯誤";
+            document.getElementById("signupError").textContent = result.message;
         }
     } catch (err) {
         console.error("Sign up fails:", err);
@@ -118,6 +118,7 @@ const signupPopup = document.querySelector(".signupPopup");
 
 document.getElementById("signInStatus").addEventListener("click", function(event) {
     event.preventDefault();
+    console.log(localStorage.getItem("token"));
     if (localStorage.getItem("token")) {
         localStorage.removeItem("token");
         location.reload();
@@ -130,6 +131,7 @@ document.getElementById("signInStatus").addEventListener("click", function(event
 document.getElementById("signinText").addEventListener("click", function() {
     signinPopup.classList.remove("open");
     signupPopup.classList.add("open");
+    document.getElementById("signinForm").reset();
     document.getElementById("signinError").textContent = "";
 });
 
@@ -137,6 +139,7 @@ document.getElementById("signinText").addEventListener("click", function() {
 document.getElementById("signupText").addEventListener("click", function() {
     signupPopup.classList.remove("open");
     signinPopup.classList.add("open");
+    document.getElementById("signupForm").reset();
     document.getElementById("signupError").textContent = "";
 });
 
@@ -150,5 +153,7 @@ document.getElementById("signupX").addEventListener("click", function() {
     signupPopup.classList.remove("open");
     document.getElementById("signupError").textContent = "";
 });
+
+
 
 document.addEventListener("DOMContentLoaded", checkSignInStatus);
