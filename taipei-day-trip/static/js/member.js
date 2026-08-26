@@ -49,6 +49,7 @@ document.getElementById("signupBtn").addEventListener("click", async function() 
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("emailSignup").value.trim();
     const password = document.getElementById("passwordSignup").value.trim();
+    const error = document.getElementById("signupError");
 
     if (!name || !email || !password) {
         alert("No input can be empty!");
@@ -67,12 +68,14 @@ document.getElementById("signupBtn").addEventListener("click", async function() 
         // Sign in successfully
         if (result.ok) {
             // Close pop-up and reset all values
-            signupPopup.classList.remove("open");
+            // signupPopup.classList.remove("open");
             document.getElementById("signupForm").reset();
-            document.getElementById("signupError").textContent = "";
+            error.textContent = "會員已成功註冊";
+            error.style.color = "#1B5E20";
         } else {
             // Show error message
             document.getElementById("signupError").textContent = result.message;
+            error.style.color = "#D32F2F";
         }
     } catch (err) {
         console.error("Sign up fails:", err);
@@ -115,10 +118,15 @@ async function checkSignInStatus() {
 // Toggle signin and signup pop-up dialogs
 const signinPopup = document.querySelector(".signinPopup");
 const signupPopup = document.querySelector(".signupPopup");
+const signinError = document.getElementById("signinError");
+const signupError = document.getElementById("signupError");
+const signinForm = document.getElementById("signinForm");
+const signupForm = document.getElementById("signupForm");
 
 document.getElementById("signInStatus").addEventListener("click", function(event) {
     event.preventDefault();
-    console.log(localStorage.getItem("token"));
+    
+    // Check if the user has token
     if (localStorage.getItem("token")) {
         localStorage.removeItem("token");
         location.reload();
@@ -131,29 +139,29 @@ document.getElementById("signInStatus").addEventListener("click", function(event
 document.getElementById("signinText").addEventListener("click", function() {
     signinPopup.classList.remove("open");
     signupPopup.classList.add("open");
-    document.getElementById("signinForm").reset();
-    document.getElementById("signinError").textContent = "";
+    signinForm.reset();
+    signinError.textContent = "";
 });
 
 // Change to Signin pop-up dialog
 document.getElementById("signupText").addEventListener("click", function() {
     signupPopup.classList.remove("open");
     signinPopup.classList.add("open");
-    document.getElementById("signupForm").reset();
-    document.getElementById("signupError").textContent = "";
+    signupForm.reset();
+    signupError.textContent = "";
 });
 
 // Close Signin / Signup pop-up dialogs
 document.getElementById("signinX").addEventListener("click", function() {
     signinPopup.classList.remove("open");
-    document.getElementById("signinForm").reset();
-    document.getElementById("signinError").textContent = "";
+    signinForm.reset();
+    signinError.textContent = "";
 });
 
 document.getElementById("signupX").addEventListener("click", function() {
     signupPopup.classList.remove("open");
-    document.getElementById("signupForm").reset();
-    document.getElementById("signupError").textContent = "";
+    signupForm.reset();
+    signupError.textContent = "";
 });
 
 
