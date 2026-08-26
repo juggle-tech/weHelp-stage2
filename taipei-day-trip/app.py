@@ -1,4 +1,6 @@
 import datetime
+import os
+from dotenv import load_dotenv
 import jwt
 from pydantic import BaseModel
 import query
@@ -10,7 +12,10 @@ from sqlmodel import SQLModel, Session
 from database import SessionDep, engine, create_database_if_not_exists
 from load_data import load_attractions_if_updated
 from contextlib import asynccontextmanager
+from jwt import ExpiredSignatureError, InvalidTokenError
 
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 @asynccontextmanager
@@ -167,20 +172,33 @@ async def signup(request: Request, session: SessionDep, body: SignupInput):
 
 @app.get("/api/user/auth")
 async def get_current_user(request: Request, session: SessionDep):
-    pass;
+    auth = request.headers.get("Authorization")
 
+    # No token -> null
+    if not auth or not auth.startswith("Bearer "):
+        return {"data": None}
 
+    token = auth.split(" ")[1]
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+    except (ExpiredSignatureError, InvalidTokenError) as e:
+        print(e)
+        return {"data": None}
+
+    # Token is valid
+    return {"data": {"id": payload.get("id"), "name": payload.get("name"), "email": payload.get("email")}}
 
 
 @app.put("/api/user/auth")
-async def signin(request: Request, session: SessionDep, body: SigninInput):
+async def signin(session: SessionDep, body: SigninInput):
     try:
-        user = query.get_user_by_email(body.email);
+        user = query.get_user_by_email(session, body.email);
         # Verify that the user has signed in successfully
         if user and query.hashed_password(body.password) == user.password:
             payload = {"id": str(user.id), "email": user.email, "name": user.name, "iat": datetime.now(datetime.timezone.utc), 
                     "exp": datetime.now(datetime.timezone.utc) + datetime.timedelta(days=7)}
-            encoded_jwt = jwt.encode(payload, "jung-taipei-daytrip", algorithm="HS256")
+            encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm=["HS256"])
             return JSONResponse(
                 status_code=200,
                 content={"token": encoded_jwt}
@@ -198,6 +216,5 @@ async def signin(request: Request, session: SessionDep, body: SigninInput):
         )
 
     
-
 
 app.mount("/static", StaticFiles(directory = "static"), name = "static")

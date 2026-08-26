@@ -1,5 +1,9 @@
 /**
- * 
+ * Sign in / sign up pop-up dialog
+ * - Toggle open/close of signin and signup pop-up dialogs
+ * - Switch between signin form and signup form
+ * - User sign in: submit credentials and store token
+ * - User sign up: submit new account and show result message
  */
 
 // Toggle signin and signup pop-up dialogues
@@ -49,7 +53,9 @@ document.getElementById("signinBtn").addEventListener("click", async function() 
 
     try {
         let response = await fetch(("/api/user/auth"), {
-            method: "PUT"
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email, password: password })
         });
         
         let result = await response.json();
