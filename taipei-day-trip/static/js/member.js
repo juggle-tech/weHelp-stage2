@@ -122,7 +122,7 @@ document.getElementById("signInStatus").addEventListener("click", function(event
     if (localStorage.getItem("token")) {
         localStorage.removeItem("token");
         location.reload();
-    } else {
+    } else if (!signupPopup.classList.contains("open")) {
         signinPopup.classList.add("open");
     }
 });
