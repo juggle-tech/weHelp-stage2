@@ -146,11 +146,13 @@ document.getElementById("signupText").addEventListener("click", function() {
 // Close Signin / Signup pop-up dialogs
 document.getElementById("signinX").addEventListener("click", function() {
     signinPopup.classList.remove("open");
+    document.getElementById("signinForm").reset();
     document.getElementById("signinError").textContent = "";
 });
 
 document.getElementById("signupX").addEventListener("click", function() {
     signupPopup.classList.remove("open");
+    document.getElementById("signupForm").reset();
     document.getElementById("signupError").textContent = "";
 });
 
