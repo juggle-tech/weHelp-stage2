@@ -6,39 +6,6 @@
  * - User sign up: submit new account and show result message
  */
 
-// Toggle signin and signup pop-up dialogues
-const signinPopup = document.querySelector(".signinPopup");
-const signupPopup = document.querySelector(".signupPopup");
-
-document.getElementById("signInStatus").addEventListener("click", function(event) {
-    event.preventDefault();
-    signinPopup.classList.add("open");
-});
-
-// Change to Signup pop-up dialogue
-document.getElementById("signinText").addEventListener("click", function() {
-    signinPopup.classList.remove("open");
-    signupPopup.classList.add("open");
-    document.getElementById("signinError").textContent = "";
-});
-
-// Change to Signin pop-up dialogue
-document.getElementById("signupText").addEventListener("click", function() {
-    signupPopup.classList.remove("open");
-    signinPopup.classList.add("open");
-    document.getElementById("signupError").textContent = "";
-});
-
-// Close Signin / Signup pop-up dialogues
-document.getElementById("signinX").addEventListener("click", function() {
-    signinPopup.classList.remove("open");
-    document.getElementById("signinError").textContent = "";
-});
-
-document.getElementById("signupX").addEventListener("click", function() {
-    signupPopup.classList.remove("open");
-    document.getElementById("signupError").textContent = "";
-});
 
 
 // User sign in 
@@ -52,7 +19,7 @@ document.getElementById("signinBtn").addEventListener("click", async function() 
     }
 
     try {
-        let response = await fetch(("/api/user/auth"), {
+        let response = await fetch("/api/user/auth", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: email, password: password })
@@ -61,7 +28,7 @@ document.getElementById("signinBtn").addEventListener("click", async function() 
         let result = await response.json();
 
         // Sign in successfully
-        if (result.data) {
+        if (result.token) {
             // Store token and change status
             localStorage.setItem("token", result.token);
             location.reload();
@@ -89,7 +56,7 @@ document.getElementById("signupBtn").addEventListener("click", async function() 
     }
 
     try {
-        let response = await fetch(("/api/user"), {
+        let response = await fetch("/api/user", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name: name, email: email, password: password })
@@ -111,3 +78,77 @@ document.getElementById("signupBtn").addEventListener("click", async function() 
         console.error("Sign up fails:", err);
     }
 });
+
+
+// Check logged-in status
+async function checkSignInStatus() {
+    const token = localStorage.getItem("token");
+    const status = document.getElementById("signInStatus");
+
+    if (!token) {
+        status.textContent = "登入/註冊";
+        return;
+    }
+
+    try {
+        let response = await fetch("/api/user/auth", {
+            method: "GET",
+            headers: { "Authorization": "Bearer " + token }
+        });
+
+        let result = await response.json();
+
+        // User has logged in with a token
+        if (result.data) {
+            status.textContent = "登出系統";
+        } else {
+            localStorage.removeItem("token");
+            status.textContent = "登入/註冊";
+        }
+    } catch (err) {
+        console.error("Sign-in status fails:", err);
+    }
+}
+
+
+/* Pop-up dialogs */
+// Toggle signin and signup pop-up dialogs
+const signinPopup = document.querySelector(".signinPopup");
+const signupPopup = document.querySelector(".signupPopup");
+
+document.getElementById("signInStatus").addEventListener("click", function(event) {
+    event.preventDefault();
+    if (localStorage.getItem("token")) {
+        localStorage.removeItem("token");
+        location.reload();
+    } else {
+        signinPopup.classList.add("open");
+    }
+});
+
+// Change to Signup pop-up dialog
+document.getElementById("signinText").addEventListener("click", function() {
+    signinPopup.classList.remove("open");
+    signupPopup.classList.add("open");
+    document.getElementById("signinError").textContent = "";
+});
+
+// Change to Signin pop-up dialog
+document.getElementById("signupText").addEventListener("click", function() {
+    signupPopup.classList.remove("open");
+    signinPopup.classList.add("open");
+    document.getElementById("signupError").textContent = "";
+});
+
+// Close Signin / Signup pop-up dialogs
+document.getElementById("signinX").addEventListener("click", function() {
+    signinPopup.classList.remove("open");
+    document.getElementById("signinError").textContent = "";
+});
+
+document.getElementById("signupX").addEventListener("click", function() {
+    signupPopup.classList.remove("open");
+    document.getElementById("signupError").textContent = "";
+});
+
+document.addEventListener("DOMContentLoaded", checkSignInStatus);

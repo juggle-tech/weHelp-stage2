@@ -1,17 +1,17 @@
-import datetime
 import os
-from dotenv import load_dotenv
 import jwt
-from pydantic import BaseModel
 import query
 
 from fastapi import *
 from fastapi.responses import FileResponse, JSONResponse
+from dotenv import load_dotenv
 from fastapi.staticfiles import StaticFiles
 from sqlmodel import SQLModel, Session
 from database import SessionDep, engine, create_database_if_not_exists
 from load_data import load_attractions_if_updated
 from contextlib import asynccontextmanager
+from datetime import datetime, timezone, timedelta
+from pydantic import BaseModel
 from jwt import ExpiredSignatureError, InvalidTokenError
 
 load_dotenv()
@@ -181,7 +181,7 @@ async def get_current_user(request: Request, session: SessionDep):
     token = auth.split(" ")[1]
 
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token, SECRET_KEY, algorithms="HS256")
     except (ExpiredSignatureError, InvalidTokenError) as e:
         print(e)
         return {"data": None}
@@ -197,8 +197,8 @@ async def signin(session: SessionDep, body: SigninInput):
         # Verify that the user has signed in successfully
         if user and query.hashed_password(body.password) == user.password:
             payload = {"id": str(user.id), "email": user.email, "name": user.name, "iat": datetime.now(datetime.timezone.utc), 
-                    "exp": datetime.now(datetime.timezone.utc) + datetime.timedelta(days=7)}
-            encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm=["HS256"])
+                    "exp": datetime.now(timezone.utc) + timedelta(days=7)}
+            encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
             return JSONResponse(
                 status_code=200,
                 content={"token": encoded_jwt}
