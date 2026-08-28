@@ -17,6 +17,11 @@ body {
     align-items: center;
 }
 
+h3 {
+    font-size: 24px;
+}
+
+
 
 /** Navigation Bar **/
 .header {
@@ -65,6 +70,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .heroContent {
@@ -87,6 +93,102 @@ body {
 .hero p {
     font-weight: 700;
     color: #FFFFFF;
+}
+
+/* Signin / Signup Pop-up */
+.signinPopup, .signupPopup {
+    display: none;
+    width: 340px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    box-shadow: 0px 4px 60px 0px #AAAAAA;
+    background-color: #FFFFFF;
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 100;
+}
+
+.signinPopup.open, .signupPopup.open {
+    display: flex;
+}
+
+.signinPopup > div:first-child, .signupPopup > div:first-child {
+    flex-shrink: 0;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px 5px 0 0;
+    background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
+}
+
+#signinForm, #signupForm {
+    width: 310px;
+    display: flex;
+    flex-direction: column;
+    color: #666666;
+    background-color: #FFFFFF;
+    margin: 15px;
+    margin-bottom: 6px;
+    gap: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#signinForm input, #signupForm input {
+    padding: 15px;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    font-weight: 500;
+    font-style: Medium;
+    font-size: 16px;
+}
+
+#signinForm div, #signupForm div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+}
+
+#signinForm #signinX, #signupForm #signupX {
+    position: absolute;
+    font-weight: 200;
+    font-size: 30px;
+    bottom: 5px;
+    right: 0;
+    cursor: pointer;
+}
+
+.signinBtn, .signupBtn {
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: #FFFFFF;
+    background: #448899;
+    border: none;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+#signinForm p, #signupForm p {
+    font-weight: 500;
+    font-style: Medium;
+    font-size: 16px;
+    color: #666666;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#signinText, #signupText {
+    cursor: pointer;
+}
+
+#signinForm .errorMsg, #signupForm .errorMsg {
+    color: #D32F2F;
 }
 
 /* Search bar */
@@ -383,12 +485,6 @@ li button {
     min-width: 0;
 }
 
-.booking h3 {
-    font-weight: 700;
-    font-style: Bold;
-    font-size: 24px;
-}
-
 .booking p {
     font-weight: 400;
     font-size: 16px;
@@ -625,7 +721,11 @@ hr {
         padding: 0px 10px;
     }
 
-    hr {
+    hr, .signinPopup, .signupPopup {
         width: calc(100% - 20px);
+    }
+
+    #signinForm, #signupForm {
+        width: calc(100% - 30px);
     }
 }

@@ -1,13 +1,21 @@
+import os
+import jwt
 import query
 
 from fastapi import *
 from fastapi.responses import FileResponse, JSONResponse
+from dotenv import load_dotenv
 from fastapi.staticfiles import StaticFiles
-from sqlmodel import SQLModel, Session
+from sqlmodel import Field, SQLModel, Session
 from database import SessionDep, engine, create_database_if_not_exists
 from load_data import load_attractions_if_updated
 from contextlib import asynccontextmanager
+from datetime import datetime, timezone, timedelta
+from pydantic import BaseModel, Field
+from jwt import ExpiredSignatureError, InvalidTokenError
 
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 @asynccontextmanager
@@ -131,5 +139,83 @@ async def get_mrts(request: Request, session: SessionDep):
     
     return {"data": data}
 
+
+# User
+class SigninInput(BaseModel):
+    email: str = Field(..., examples=["jung@example.com"])
+    password: str = Field(..., examples=["jung"])
+
+class SignupInput(BaseModel):
+    name: str = Field(..., examples=["Jung"])
+    email: str = Field(..., examples=["jung@example.com"])
+    password: str = Field(..., examples=["jung"])
+
+
+@app.post("/api/user")
+async def signup(request: Request, session: SessionDep, body: SignupInput):
+    try:
+        print(query.get_user_by_email(session, body.email))
+        if not query.get_user_by_email(session, body.email):
+            query.create_user(session, body.name, body.email, body.password)
+            return {"ok": True}
+        else:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "註冊失敗，重複的 Email 或其他原因"}
+            )
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        )    
+
+
+@app.get("/api/user/auth")
+async def get_current_user(request: Request, session: SessionDep):
+    auth = request.headers.get("Authorization")
+
+    # No token -> null
+    if not auth or not auth.startswith("Bearer "):
+        return {"data": None}
+
+    token = auth.split(" ")[1]
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms="HS256")
+    except (ExpiredSignatureError, InvalidTokenError) as e:
+        print(e)
+        return {"data": None}
+
+    # Token is valid
+    return {"data": {"id": payload.get("id"), "name": payload.get("name"), "email": payload.get("email")}}
+
+
+@app.put("/api/user/auth")
+async def signin(session: SessionDep, body: SigninInput):
+    try:
+        user = query.get_user_by_email(session, body.email);
+        # Verify that the user has signed in successfully
+        if user and query.verify_password(body.password, user.password):
+            payload = {"id": str(user.id), "email": user.email, "name": user.name, "iat": datetime.now(timezone.utc), 
+                    "exp": datetime.now(timezone.utc) + timedelta(days=7)}
+            encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+            return JSONResponse(
+                status_code=200,
+                content={"token": encoded_jwt}
+            )
+        else:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "登入失敗，帳號或密碼錯誤或其他原因"}
+            )
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        )
+
+    
 
 app.mount("/static", StaticFiles(directory = "static"), name = "static")

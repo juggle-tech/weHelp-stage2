@@ -1,8 +1,9 @@
+from datetime import datetime
 from typing import List, Optional
  
 from sqlalchemy import Column, Text
 from sqlalchemy.dialects.mysql import INTEGER as MySQLInteger, JSON
-from sqlmodel import SQLModel, Field
+from sqlmodel import DateTime, SQLModel, Field, text
 
 
 class Attraction(SQLModel, table=True):
@@ -33,4 +34,20 @@ class DataVersion(SQLModel, table=True):
     )
     filename: str = Field(max_length=255, nullable=False, unique=True)
     filehash: str = Field(max_length=64, nullable=False)
+
+
+class User(SQLModel, table=True):
+    __tablename__ = "user"
+
+    id: int | None = Field(
+        default=None,
+        sa_column=Column(MySQLInteger(unsigned=True), primary_key=True, autoincrement=True)
+    )
+    name: str = Field(max_length=255, nullable=False)
+    email: str = Field(max_length=255, nullable=False, unique=True)
+    password: str = Field(max_length=255, nullable=False)
+    create_time: datetime = Field(
+        default=None,
+        sa_column=Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
+    )
 
