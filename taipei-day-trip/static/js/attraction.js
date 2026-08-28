@@ -74,10 +74,21 @@ const indicator = document.getElementById("indicator");
 const leftBtnSlide = document.getElementById("leftBtnSlide");
 const rightBtnSlide = document.getElementById("rightBtnSlide");
 
+// Pre-load images
+function preloadImages(urls) {
+    urls.forEach((url) => {
+        const img = new Image();
+        img.src = url;
+    });
+}
+
+// Initialize slide show
 function initSlideShow(images) {
 
     slideImages = images;
     curIndex = 0;
+
+    preloadImages(slideImages);
 
     slideImg.style.backgroundImage = "url(" + slideImages[curIndex] + ")";
 
