@@ -33,6 +33,7 @@ h3 {
     z-index: 100;
     background-color: #ffffff;
     padding: 10px 0px;
+    border-bottom: 1px solid #E8E8E8;;
 }
 
 .navBar {
@@ -96,6 +97,10 @@ h3 {
 }
 
 /* Signin / Signup Pop-up */
+#signInStatus {
+    cursor: pointer;
+}
+
 .signinPopup, .signupPopup {
     display: none;
     width: 340px;
@@ -594,6 +599,60 @@ hr {
 .attrDetail p {
     margin-bottom: 30px;
 }
+
+
+
+/*** booking.html ***/
+.booking {
+    font-weight: 400;
+    font-style: Medium;
+    font-size: 16px;
+}
+
+.booking h3 {
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 19px;
+}
+
+.booking hr {
+    width: 1200px;
+    margin: 40px auto;
+}
+
+.bookedAttr {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 10px 20px 10px;
+    gap: 30px;
+}
+
+.bookedAttrBlock h3 {
+    margin-top: 40px;
+}
+
+.bookedDetail p {
+    margin-top: 10px;
+    padding: 5px 0;
+}
+
+.bookedDetail p:first-child {
+    font-weight: 700;
+    font-style: Bold;
+    color: #448899;
+    margin-top: 0;
+}
+
+#bookedAttrImg {
+    width: 250px;
+}
+
+.bookedAttr img:last-child {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
 
 
 /** Footer **/

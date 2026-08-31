@@ -52,11 +52,11 @@ class User(SQLModel, table=True):
     )
 
 
-class Booking(SQLModel, table=True):
-    __tablename__ = "booking"
+# class Booking(SQLModel, table=True):
+#     __tablename__ = "booking"
     
-    user_id: int = Field(primary_key=True)
-    attr_id: int = Field(nullable=False)
-    booking_date: date = Field(nullable=False)
-    time: str = Field(max_length=255, nullable=False)
-    price: int = Field(nullable=False)
+#     user_id: int = Field(primary_key=True)
+#     attr_id: int = Field(nullable=False)
+#     booking_date: date = Field(nullable=False)
+#     time: str = Field(max_length=255, nullable=False)
+#     price: int = Field(nullable=False)
