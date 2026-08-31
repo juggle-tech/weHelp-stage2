@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import List, Optional
  
 from sqlalchemy import Column, Text
@@ -51,3 +51,12 @@ class User(SQLModel, table=True):
         sa_column=Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     )
 
+
+class Booking(SQLModel, table=True):
+    __tablename__ = "booking"
+    
+    user_id: int = Field(primary_key=True)
+    attr_id: int = Field(nullable=False)
+    booking_date: date = Field(nullable=False)
+    time: str = Field(max_length=255, nullable=False)
+    price: int = Field(nullable=False)

@@ -216,6 +216,22 @@ async def signin(session: SessionDep, body: SigninInput):
             content={"error": True, "message": "伺服器內部錯誤"}
         )
 
+
+# Booking
+@app.get("/api/booking")
+async def getBooking():
+    pass
+
+
+@app.post("/api/booking")
+async def createBooking():
+    pass
+
+
+@app.delete("/api/booking")
+async def deleteBooking():
+    pass
+
     
 
 app.mount("/static", StaticFiles(directory = "static"), name = "static")
