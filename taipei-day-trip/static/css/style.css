@@ -179,6 +179,15 @@ h3 {
     cursor: pointer;
 }
 
+.signinBtn:hover, .signupBtn:hover {
+    background-color: #3A7686;
+}
+
+.signinBtn:active, .signupBtn:active {
+    background-color: #2F6273;
+    transform: scale(0.97);
+}
+
 #signinForm p, #signupForm p {
     font-weight: 500;
     font-style: Medium;
@@ -603,32 +612,52 @@ hr {
 
 
 /*** booking.html ***/
-.booking {
+.bookingPage {
     font-weight: 400;
     font-style: Medium;
     font-size: 16px;
+    color: #666666;
 }
 
-.booking h3 {
+.bookingPage h3 {
     font-weight: 700;
     font-style: Bold;
     font-size: 19px;
 }
 
-.booking hr {
+.bookingPage hr {
     width: 1200px;
     margin: 40px auto;
+    border: 1px solid #E8E8E8;
+}
+
+.bookedAttrBlock {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.bookedAttrBlock h3 {
+    margin: 0px 20px;
 }
 
 .bookedAttr {
     display: flex;
     justify-content: space-between;
-    margin: 30px 10px 20px 10px;
+    margin: 30px;
+    margin-bottom: 0;
+}
+
+.bookedAttr > div {
+    display: flex;
+    flex-direction: row;
     gap: 30px;
 }
 
-.bookedAttrBlock h3 {
-    margin-top: 40px;
+#bookedAttrImg {
+    width: 250px;
+    height: auto;
+    cursor: auto;
 }
 
 .bookedDetail p {
@@ -643,14 +672,67 @@ hr {
     margin-top: 0;
 }
 
-#bookedAttrImg {
-    width: 250px;
-}
-
-.bookedAttr img:last-child {
+.bookedAttr img {
     width: 30px;
     height: 30px;
     cursor: pointer;
+}
+
+
+/* Contact and Payment sections */
+.contactBlock, .paymentBlock {
+    display: flex;
+    flex-direction: column;
+    margin: 0 30px;
+    gap: 15px;
+}
+
+.contactBlock h3, .paymentBlock h3 {
+    margin-bottom: 5px;
+}
+
+.formRow input {
+    padding: 10px;
+    border-radius: 5px;
+    color: #FFFFFF;
+    border: 1px solid #E8E8E8;
+}
+
+.contactBlock p {
+    font-weight: 700;
+    font-style: Bold;
+}
+
+
+/* Booking summary section */
+.bookingSummary {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-weight: 700;
+    margin-bottom: 40px;
+    padding-right: 30px;
+}
+
+.bookingConfirmBtn {
+    margin: 22px 0;
+    font-weight: 400;
+    font-size: 19px;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background: #448899;
+    cursor: pointer;
+}
+
+.bookingConfirmBtn:hover {
+    background-color: #3A7686;
+}
+
+.bookingConfirmBtn:active {
+    background-color: #2F6273;
+    transform: scale(0.99);
 }
 
 
@@ -694,7 +776,7 @@ hr {
         width: 50%;
     }
 
-    hr {
+    hr, .bookingPage hr {
         width: calc(100% - 20px);
     }
 }
@@ -733,7 +815,7 @@ hr {
         width: 100%;
     }
 
-    hr {
+    hr, .bookingPage hr {
         width: calc(100% - 20px);
     }
 }
@@ -780,11 +862,35 @@ hr {
         padding: 0px 10px;
     }
 
-    hr, .signinPopup, .signupPopup {
+    hr, .bookingPage hr, .signinPopup, .signupPopup {
         width: calc(100% - 20px);
     }
 
     #signinForm, #signupForm {
         width: calc(100% - 30px);
+    }
+
+    .bookedAttrBlock > h3 {
+        margin-left: 10px;
+    }
+
+    .bookedAttr {
+        flex-direction: column;
+        margin: 0;
+        margin-top: 30px;
+        width: calc(100% - 20px);
+        align-self: center;
+    }
+
+    .bookedAttr > div {
+        flex-direction: column;
+    }
+
+    #bookedAttrImg {
+        width: 100%;
+    }
+
+    .bookedAttr > img {
+        align-self: flex-end;
     }
 }
