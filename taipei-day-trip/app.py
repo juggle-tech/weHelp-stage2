@@ -60,7 +60,7 @@ async def thankyou(request: Request):
 ## API
 # Attraction
 @app.get("/api/attractions")
-async def get_attractions(request: Request, session: SessionDep, page: int = 0, 
+async def get_attractions(session: SessionDep, page: int = 0, 
                         category: str | None = None, keyword: str | None = None):
 
     # Check if the input page is valid
@@ -92,7 +92,7 @@ async def get_attractions(request: Request, session: SessionDep, page: int = 0,
 
 
 @app.get("/api/attraction/{attractionId}")
-async def get_an_attraction(request: Request, session: SessionDep, attractionId: int):
+async def get_an_attraction(session: SessionDep, attractionId: int):
     try:
         data = query.get_attraction_by_id(session, attractionId)
     except Exception as e:
@@ -112,7 +112,7 @@ async def get_an_attraction(request: Request, session: SessionDep, attractionId:
 
 # Attraction Category
 @app.get("/api/categories")
-async def get_category(request: Request, session: SessionDep):
+async def get_category(session: SessionDep):
     try:
         data = query.get_all_categories(session)
     except Exception as e:
@@ -127,7 +127,7 @@ async def get_category(request: Request, session: SessionDep):
 
 # MRT Station
 @app.get("/api/mrts")
-async def get_mrts(request: Request, session: SessionDep):
+async def get_mrts(session: SessionDep):
     try:
         data = query.get_ordered_mrts(session)
     except Exception as e:
@@ -141,10 +141,6 @@ async def get_mrts(request: Request, session: SessionDep):
 
 
 # User
-class SigninInput(BaseModel):
-    email: str = Field(..., examples=["jung@example.com"])
-    password: str = Field(..., examples=["jung"])
-
 class SignupInput(BaseModel):
     name: str = Field(..., examples=["Jung"])
     email: str = Field(..., examples=["jung@example.com"])
@@ -152,7 +148,7 @@ class SignupInput(BaseModel):
 
 
 @app.post("/api/user")
-async def signup(request: Request, session: SessionDep, body: SignupInput):
+async def signup(session: SessionDep, body: SignupInput):
     try:
         print(query.get_user_by_email(session, body.email))
         if not query.get_user_by_email(session, body.email):
@@ -196,6 +192,10 @@ async def get_current_user(request: Request):
         return {"data": None}
     return {"data": {"id": payload.get("id"), "name": payload.get("name"), "email": payload.get("email")}}
 
+
+class SigninInput(BaseModel):
+    email: str = Field(..., examples=["jung@example.com"])
+    password: str = Field(..., examples=["jung"])
 
 @app.put("/api/user/auth")
 async def signin(session: SessionDep, body: SigninInput):
@@ -264,6 +264,15 @@ async def createBooking(request: Request, session: SessionDep):
         )
 
     # Create booking
+    try:
+
+        pass
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        ) 
 
 
 @app.delete("/api/booking")
@@ -277,6 +286,15 @@ async def deleteBooking(request: Request, session: SessionDep):
         )
 
     # Delete booking
+    try:
+    
+        pass
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        ) 
 
     
 

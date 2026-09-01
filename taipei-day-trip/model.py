@@ -1,13 +1,13 @@
 from datetime import datetime, date
 from typing import List, Optional
  
-from sqlalchemy import Column, Text
+from sqlalchemy import Column, ForeignKey, Text
 from sqlalchemy.dialects.mysql import INTEGER as MySQLInteger, JSON
 from sqlmodel import DateTime, SQLModel, Field, text
 
 
 class Attraction(SQLModel, table=True):
-    __tablename__ = "attractions"
+    __tablename__ = "attraction"
 
     id: int | None = Field(
         default=None,
@@ -55,8 +55,13 @@ class User(SQLModel, table=True):
 class Booking(SQLModel, table=True):
     __tablename__ = "booking"
     
-    user_id: int = Field(primary_key=True,  foreign_key="user.id")
-    attr_id: int = Field(nullable=False, foreign_key="attractions.id")
+    user_id: int = Field(
+        sa_column=Column(MySQLInteger(unsigned=True), ForeignKey("user.id"), primary_key=True, nullable=False)
+    )
+    attr_id: int = Field(nullable=False, foreign_key="attraction.attr_id")
     booking_date: date = Field(nullable=False)
-    time: str = Field(max_length=255, nullable=False)
+    time: str = Field(max_length=20, nullable=False)
     price: int = Field(nullable=False)
+    contact_name: str = Field(max_length=255, nullable=False)
+    contact_email: str = Field(max_length=255, nullable=False)
+    contact_number: str = Field(max_length=20, nullable=False)
