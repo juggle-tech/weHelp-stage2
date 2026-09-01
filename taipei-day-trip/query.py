@@ -3,13 +3,12 @@ import secrets
 from typing import Counter
 
 from sqlmodel import func, or_, select
-from model import Attraction, User
+from model import Attraction, User, Booking
 
 PAGE_SIZE = 8
 
 
 def get_filtered_attractions(session, page, category, keyword):
-    
     stat = select(Attraction)
 
     if category:
@@ -38,19 +37,16 @@ def get_filtered_attractions(session, page, category, keyword):
 
 
 def get_all_categories(session):
-
     stat = select(Attraction.category).distinct()
     return session.exec(stat).all()
 
 
 def get_attraction_by_id(session, id):
-
     stat = select(Attraction).where(Attraction.attr_id == id)
     return session.exec(stat).first()
 
 
 def get_ordered_mrts(session):
-
     # Filter null and empty string
     stat = select(Attraction.mrt).where(Attraction.mrt.is_not(None), Attraction.mrt != "")
     results = session.exec(stat).all()
@@ -65,13 +61,11 @@ def get_ordered_mrts(session):
 
 
 def get_user_by_email(session, email):
-
     stat = select(User).where(User.email == email)
     return session.exec(stat).first()
 
 
 def create_user(session, name, email, password):
-
     hashed_pwd = hash_password(password)
     user = User(name=name, email=email, password=hashed_pwd)
     session.add(user)
@@ -90,3 +84,13 @@ def hash_password(password, salt=None):
 def verify_password(password, stored_pwd):
     salt, hashed_pwd = stored_pwd.split("$")
     return hash_password(password, salt) == stored_pwd
+
+
+def get_booking(session, user_id):
+    stat = (
+        select(Booking, Attraction)
+        .join(Attraction, Booking.attr_id == Attraction.attr_id)
+        .where(Booking.user_id == user_id)
+    )
+
+    return session.exec(stat).first()

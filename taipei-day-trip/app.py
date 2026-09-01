@@ -168,26 +168,32 @@ async def signup(request: Request, session: SessionDep, body: SignupInput):
         return JSONResponse(
             status_code=500,
             content={"error": True, "message": "伺服器內部錯誤"}
-        )    
+        ) 
 
 
-@app.get("/api/user/auth")
-async def get_current_user(request: Request, session: SessionDep):
+# Helper for decoding token
+def _decode_token(request: Request):
     auth = request.headers.get("Authorization")
-
+    
     # No token -> null
     if not auth or not auth.startswith("Bearer "):
         return {"data": None}
-
+    
     token = auth.split(" ")[1]
 
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms="HS256")
+        return jwt.decode(token, SECRET_KEY, algorithms="HS256")
     except (ExpiredSignatureError, InvalidTokenError) as e:
         print(e)
-        return {"data": None}
+        return None
 
-    # Token is valid
+
+@app.get("/api/user/auth")
+async def get_current_user(request: Request):
+    payload = _decode_token(request)
+
+    if payload is None:
+        return {"data": None}
     return {"data": {"id": payload.get("id"), "name": payload.get("name"), "email": payload.get("email")}}
 
 
@@ -219,18 +225,58 @@ async def signin(session: SessionDep, body: SigninInput):
 
 # Booking
 @app.get("/api/booking")
-async def getBooking():
-    pass
+async def getBooking(request: Request, session: SessionDep):
+    # Verify authentication
+    payload = _decode_token(request)
+    if payload is None:
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "未登入系統，拒絕存取"}
+        )
+
+    # Retrieve booking info
+    try:
+        booking_data = query.get_booking(session, payload.get("id"))
+        return JSONResponse(
+            status_code=200,
+            content={"data": { "attraction": {"id": booking_data.attr_id, "name": booking_data.name, "address": booking_data.address, "image": booking_data.images[0]},
+                               "date": booking_data.booking_date, 
+                               "time": booking_data.time,
+                               "price": booking_data.price
+                             }}
+        )
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        ) 
 
 
 @app.post("/api/booking")
-async def createBooking():
-    pass
+async def createBooking(request: Request, session: SessionDep):
+    # Verify authentication
+    payload = _decode_token(request)
+    if payload is None:
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "未登入系統，拒絕存取"}
+        )
+
+    # Create booking
 
 
 @app.delete("/api/booking")
-async def deleteBooking():
-    pass
+async def deleteBooking(request: Request, session: SessionDep):
+    # Verify authentication
+    payload = _decode_token(request)
+    if payload is None:
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "未登入系統，拒絕存取"}
+        )
+
+    # Delete booking
 
     
 

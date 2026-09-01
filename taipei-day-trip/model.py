@@ -13,7 +13,7 @@ class Attraction(SQLModel, table=True):
         default=None,
         sa_column=Column(MySQLInteger(unsigned=True), primary_key=True, autoincrement=True)
     )
-    attr_id: int = Field(nullable=False)
+    attr_id: int = Field(nullable=False, unique=True)
     name: str = Field(max_length=255, nullable=False)
     category: str = Field(max_length=255, nullable=False)
     mrt: Optional[str] = Field(default=None, max_length=255)
@@ -52,11 +52,11 @@ class User(SQLModel, table=True):
     )
 
 
-# class Booking(SQLModel, table=True):
-#     __tablename__ = "booking"
+class Booking(SQLModel, table=True):
+    __tablename__ = "booking"
     
-#     user_id: int = Field(primary_key=True)
-#     attr_id: int = Field(nullable=False)
-#     booking_date: date = Field(nullable=False)
-#     time: str = Field(max_length=255, nullable=False)
-#     price: int = Field(nullable=False)
+    user_id: int = Field(primary_key=True,  foreign_key="user.id")
+    attr_id: int = Field(nullable=False, foreign_key="attractions.id")
+    booking_date: date = Field(nullable=False)
+    time: str = Field(max_length=255, nullable=False)
+    price: int = Field(nullable=False)
