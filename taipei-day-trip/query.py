@@ -68,10 +68,17 @@ def get_user_by_email(session, email):
 def create_user(session, name, email, password):
     hashed_pwd = hash_password(password)
     user = User(name=name, email=email, password=hashed_pwd)
-    session.add(user)
-    session.commit()
-    session.refresh(user)
-    return user
+
+    try:
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+        return user
+    except Exception as e:
+        print(e)
+        session.rollback()
+        return None
+    
 
 
 def hash_password(password, salt=None):
@@ -95,19 +102,40 @@ def get_booking(session, user_id):
     return session.exec(stat).first()
 
 
+def get_booking_by_userid(session, user_id):
+    stat = select(Booking).where(Booking.user_id == user_id)
+    return session.exec(stat).one_or_none()
+
+
 def add_booking_to_cart(session, user_id, attr_id, booking_date, time, price):
-    booking= Booking(user_id=user_id , attr_id=attr_id, booking_date=booking_date, time=time, price=price)
-    session.add(booking)
-    session.commit()
-    session.refresh(booking)
-    return booking
+    booking = get_booking_by_userid(session, user_id)
+
+    if booking is not None:
+        return False
+    
+    try:
+        booking= Booking(user_id=user_id , attr_id=attr_id, booking_date=booking_date, time=time, price=price)
+        session.add(booking)
+        session.commit()
+        session.refresh(booking)
+        return booking
+    except Exception as e:
+        print(e)
+        session.rollback()
+        return None
 
 
 def delete_booking(session, user_id):
-    stat = select(Booking).where(Booking.user_id == user_id)
-    booking = session.exec(stat).first()
+    booking = get_booking_by_userid(session, user_id)
 
-    if booking is not None:
+    if booking is None:
+        return None
+
+    try:
         session.delete(booking)
         session.commit()
-    return booking
+        return booking
+    except Exception as e:
+        print(e)
+        session.rollback()
+        return None

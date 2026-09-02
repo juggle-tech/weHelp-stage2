@@ -150,14 +150,20 @@ class SignupInput(BaseModel):
 @app.post("/api/user")
 async def signup(session: SessionDep, body: SignupInput):
     try:
-        if not query.get_user_by_email(session, body.email):
-            query.create_user(session, body.name, body.email, body.password)
-            return {"ok": True}
-        else:
+        if query.get_user_by_email(session, body.email):
             return JSONResponse(
                 status_code=400,
                 content={"error": True, "message": "註冊失敗，重複的 Email 或其他原因"}
             )
+        
+        user = query.create_user(session, body.name, body.email, body.password)
+        if user is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "存取失敗"}
+            )
+
+        return {"ok": True}
     except Exception as e:
         print(e)
         return JSONResponse(
@@ -276,7 +282,18 @@ async def createBooking(request: Request, session: SessionDep, body: AttractionC
     # Create booking
     try:
         booking = query.add_booking_to_cart(session, body.user_id, body.attr_id, body.booking_date, body.time, body.price)
-        return {"attractionId": booking.attr_id, "date": booking.date, "time": booking.time, "price": booking.price}
+        if booking is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "建立失敗，輸入不正確或其他原因"}
+            )
+        elif booking is False:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "已有預定行程"}
+            )
+
+        return {"attractionId": booking.attr_id, "date": booking.booking_date, "time": booking.time, "price": booking.price}
     except Exception as e:
         print(e)
         return JSONResponse(
@@ -300,7 +317,13 @@ async def deleteBooking(request: Request, session: SessionDep, body: DeleteVerif
 
     # Delete booking
     try:
-        return query.delete_booking(session, body.user_id)
+        result = query.delete_booking(session, body.user_id)
+        if result is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "刪除失敗"}
+            )
+        return {"ok": True}
     except Exception as e:
         print(e)
         return JSONResponse(
