@@ -89,37 +89,6 @@ document.getElementById("signupBtn").addEventListener("click", async function() 
 });
 
 
-// Check logged-in status
-async function checkSignInStatus() {
-    const token = localStorage.getItem("token");
-    const status = document.getElementById("signInStatus");
-
-    if (!token) {
-        status.textContent = "登入/註冊";
-        return;
-    }
-
-    try {
-        let response = await fetch("/api/user/auth", {
-            method: "GET",
-            headers: { "Authorization": "Bearer " + token }
-        });
-
-        let result = await response.json();
-
-        // User has logged in with a token
-        if (result.data) {
-            status.textContent = "登出系統";
-        } else {
-            localStorage.removeItem("token");
-            status.textContent = "登入/註冊";
-        }
-    } catch (err) {
-        console.error("Sign-in status fails:", err);
-    }
-}
-
-
 // Get current user info
 async function getCurrentUser(token) {
     try {
@@ -140,6 +109,32 @@ async function getCurrentUser(token) {
     } catch (err) {
         console.error("Sign-in status fails:", err);
         return null;
+    }
+}
+
+
+// Check logged-in status
+async function checkSignInStatus() {
+    const token = localStorage.getItem("token");
+    const status = document.getElementById("signInStatus");
+
+    if (!token) {
+        status.textContent = "登入/註冊";
+        return;
+    }
+
+    const user = await getCurrentUser(token);
+
+    try {
+        // User has logged in with a token
+        if (user) {
+            status.textContent = "登出系統";
+        } else {
+            localStorage.removeItem("token");
+            status.textContent = "登入/註冊";
+        }
+    } catch (err) {
+        console.error("Sign-in status fails:", err);
     }
 }
 
