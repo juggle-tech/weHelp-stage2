@@ -21,7 +21,6 @@ async function getAttractionDetail(attractionId) {
         let result = await response.json();
 
         if (!result.error) {
-            console.log("In");
             let attrName = document.getElementById("attrName");
             attrName.textContent = result.data.name;
 

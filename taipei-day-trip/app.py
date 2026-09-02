@@ -150,7 +150,6 @@ class SignupInput(BaseModel):
 @app.post("/api/user")
 async def signup(session: SessionDep, body: SignupInput):
     try:
-        print(query.get_user_by_email(session, body.email))
         if not query.get_user_by_email(session, body.email):
             query.create_user(session, body.name, body.email, body.password)
             return {"ok": True}
@@ -171,11 +170,14 @@ async def signup(session: SessionDep, body: SignupInput):
 def _decode_token(request: Request):
     auth = request.headers.get("Authorization")
     
-    # No token -> null
+    # No token or in wrong format
     if not auth or not auth.startswith("Bearer "):
-        return {"data": None}
-    
-    token = auth.split(" ")[1]
+        return None
+
+    # Token starts with Bearer but with empty token
+    token = auth.removeprefix("Bearer ").strip()
+    if not token:
+        return None
 
     try:
         return jwt.decode(token, SECRET_KEY, algorithms="HS256")
@@ -201,6 +203,7 @@ class SigninInput(BaseModel):
 async def signin(session: SessionDep, body: SigninInput):
     try:
         user = query.get_user_by_email(session, body.email);
+
         # Verify that the user has signed in successfully
         if user and query.verify_password(body.password, user.password):
             payload = {"id": str(user.id), "email": user.email, "name": user.name, "iat": datetime.now(timezone.utc), 
@@ -253,8 +256,15 @@ async def getBooking(request: Request, session: SessionDep):
         ) 
 
 
+class AttractionCart(BaseModel):
+    user_id: int = Field(..., examples=["1"])
+    attr_id: int = Field(..., examples=["1"])
+    booking_date: datetime = Field(..., examples=["2026-09-03"])
+    time: str = Field(..., examples=["morning"])
+    price: int = Field(..., examples=["2000"])
+
 @app.post("/api/booking")
-async def createBooking(request: Request, session: SessionDep):
+async def createBooking(request: Request, session: SessionDep, body: AttractionCart):
     # Verify authentication
     payload = _decode_token(request)
     if payload is None:
@@ -265,8 +275,8 @@ async def createBooking(request: Request, session: SessionDep):
 
     # Create booking
     try:
-
-        pass
+        booking = query.add_booking_to_cart(session, body.user_id, body.attr_id, body.booking_date, body.time, body.price)
+        return {"attractionId": booking.attr_id, "date": booking.date, "time": booking.time, "price": booking.price}
     except Exception as e:
         print(e)
         return JSONResponse(
@@ -275,8 +285,11 @@ async def createBooking(request: Request, session: SessionDep):
         ) 
 
 
+class DeleteVerification(BaseModel):
+    user_id: int = Field(..., examples=["1"])
+
 @app.delete("/api/booking")
-async def deleteBooking(request: Request, session: SessionDep):
+async def deleteBooking(request: Request, session: SessionDep, body: DeleteVerification):
     # Verify authentication
     payload = _decode_token(request)
     if payload is None:
@@ -287,8 +300,7 @@ async def deleteBooking(request: Request, session: SessionDep):
 
     # Delete booking
     try:
-    
-        pass
+        return query.delete_booking(session, body.user_id)
     except Exception as e:
         print(e)
         return JSONResponse(

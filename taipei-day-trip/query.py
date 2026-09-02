@@ -2,7 +2,7 @@ import hashlib
 import secrets
 from typing import Counter
 
-from sqlmodel import func, or_, select
+from sqlmodel import or_, select
 from model import Attraction, User, Booking
 
 PAGE_SIZE = 8
@@ -92,5 +92,22 @@ def get_booking(session, user_id):
         .join(Attraction, Booking.attr_id == Attraction.attr_id)
         .where(Booking.user_id == user_id)
     )
-
     return session.exec(stat).first()
+
+
+def add_booking_to_cart(session, user_id, attr_id, booking_date, time, price):
+    booking= Booking(user_id=user_id , attr_id=attr_id, booking_date=booking_date, time=time, price=price)
+    session.add(booking)
+    session.commit()
+    session.refresh(booking)
+    return booking
+
+
+def delete_booking(session, user_id):
+    stat = select(Booking).where(Booking.user_id == user_id)
+    booking = session.exec(stat).first()
+
+    if booking is not None:
+        session.delete(booking)
+        session.commit()
+    return booking
