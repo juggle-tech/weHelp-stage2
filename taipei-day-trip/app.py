@@ -246,10 +246,11 @@ async def getBooking(request: Request, session: SessionDep):
     # Retrieve booking info
     try:
         booking = query.get_booking(session, int(payload.get("id")))
-        if booking_data is None:
+        if booking is None:
             return {"data": None}
 
         booking_data, attraction_data = booking
+
         return JSONResponse(
             status_code=200,
             content={"data": { "attraction": {"id": attraction_data.attr_id, "name": attraction_data.name, "address": attraction_data.address, "image": attraction_data.images[0]},

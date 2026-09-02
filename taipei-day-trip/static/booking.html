@@ -16,7 +16,7 @@
 
       <nav>
         <ul class="menu">
-          <a id="bookingTrip" href="/booking">預定行程</a>
+          <a id="bookingTrip">預定行程</a>
           <a id="signInStatus">登入/註冊</a>
         </ul>
       </nav>
@@ -59,26 +59,27 @@
   <div class="mainContentBlock bookingPage">
     <!-- Booked attraction -->
     <div class="bookedAttrBlock">
-      <h3>您好，<span id="username">Jung</span>，待預訂的行程如下:</h3>
-      <div class="bookedAttr">
+      <h3>您好，<span id="username"></span>，待預訂的行程如下:</h3>
+      <span id="bookingEmptyMsg"></span>
+      <div id="bookedAttr" class="bookedAttr">
         <div>
-          <img id="bookedAttrImg" src="static/images/welcomeImage.png"/>
+          <img id="bookedAttrImg" src=""/>
           <div class="bookedDetail">
-            <p>台北一日遊: <span id="bookedAttrName">平安鐘</span> </p>
-            <p>日期: 2021-04-23</p>
-            <p>時間: 早上 9 點到下 4 點 </p>
-            <p>費用: 新台幣 2000 元</p>
-            <p>地點: 台北市大安區忠孝東路4段</p>
+            <p>台北一日遊: <span id="bookedAttrName"></span> </p>
+            <p>日期: <span id="bookedAttrDate"></span></p>
+            <p>時間: 早上 9 點到下午 4 點 </p>
+            <p>費用: 新台幣 <span class="bookedAttrPrice"></span> 元</p>
+            <p>地點: <span class="bookedAttrAddr"></span></p>
           </div>
         </div>
         <img src="static/images/delete.png"/>
       </div>
     </div>
 
-    <hr>
+    <hr class="bookingHr">
 
     <!-- Contact section-->
-    <div class="contactBlock">
+    <div id="contactBlock" class="contactBlock">
       <h3>您的聯絡資訊</h3>
       <div class="formRow">
         <label for="contactName">聯絡姓名：</label>
@@ -95,10 +96,10 @@
       <p>請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，請務必留下正確的聯絡方式。</p>
     </div>
 
-    <hr>
+    <hr class="bookingHr">
 
     <!-- Payment section -->
-    <div class="paymentBlock">
+    <div id="paymentBlock" class="paymentBlock">
       <h3>信用卡付款資訊</h3>
       <div class="formRow">
         <label for="cardNumber">卡片號碼：</label>
@@ -114,11 +115,11 @@
       </div>
     </div>
 
-    <hr>
+    <hr class="bookingHr">
 
     <!-- Summary -->
-    <div class="bookingSummary">
-      <p>總價：新台幣 2000 元</p>
+    <div id="summaryBlock" class="bookingSummary">
+      <p>總價：新台幣 <span class="bookedAttrPrice">2000</span> 元</p>
       <button type="button" class="bookingConfirmBtn">確認訂購並付款</button>
     </div>
 

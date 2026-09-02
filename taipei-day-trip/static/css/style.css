@@ -12,6 +12,7 @@ html {
 body {
     font-family: Noto Sans TC;
     width: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -613,6 +614,7 @@ hr {
 
 /*** booking.html ***/
 .bookingPage {
+    width: 1000px;
     font-weight: 400;
     font-style: Medium;
     font-size: 16px;
@@ -625,7 +627,8 @@ hr {
     font-size: 19px;
 }
 
-.bookingPage hr {
+.bookingHr {
+    display: none;
     width: 1200px;
     margin: 40px auto;
     border: 1px solid #E8E8E8;
@@ -642,10 +645,10 @@ hr {
 }
 
 .bookedAttr {
-    display: flex;
     justify-content: space-between;
     margin: 30px;
     margin-bottom: 0;
+    display: none;
 }
 
 .bookedAttr > div {
@@ -681,7 +684,7 @@ hr {
 
 /* Contact and Payment sections */
 .contactBlock, .paymentBlock {
-    display: flex;
+    display: none;
     flex-direction: column;
     margin: 0 30px;
     gap: 15px;
@@ -706,7 +709,7 @@ hr {
 
 /* Booking summary section */
 .bookingSummary {
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: flex-end;
     font-weight: 700;
@@ -735,6 +738,18 @@ hr {
     transform: scale(0.99);
 }
 
+.bookedAttr.show, .contactBlock.show, .paymentBlock.show, .bookingSummary.show, .bookingHr.show{
+    display: flex;
+}
+
+#bookingTrip {
+    cursor: pointer;
+}
+
+#bookingEmptyMsg {
+    margin: 30px 20px 0 20px;
+}
+
 
 
 /** Footer **/
@@ -743,6 +758,7 @@ hr {
     background: #757575;
     padding: 40px 0;
     text-align: center;
+    flex: 1 0 auto;
 }
 
 .footer p {
@@ -868,10 +884,6 @@ hr {
 
     #signinForm, #signupForm {
         width: calc(100% - 30px);
-    }
-
-    .bookedAttrBlock > h3 {
-        margin-left: 10px;
     }
 
     .bookedAttr {

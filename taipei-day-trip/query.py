@@ -78,7 +78,6 @@ def create_user(session, name, email, password):
         print(e)
         session.rollback()
         return None
-    
 
 
 def hash_password(password, salt=None):
