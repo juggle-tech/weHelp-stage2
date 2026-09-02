@@ -54,11 +54,11 @@ const timeInputs = document.querySelectorAll('input[name="time"]');
 const fee = document.getElementById("fee");
 
 timeInputs.forEach((input) => {
-  input.addEventListener('change', () => {
+  input.addEventListener("change", () => {
     if (input.value === "morning") {
-      fee.textContent = " 新台幣 2000 元 ";
+      fee.textContent = "2000";
     } else {
-      fee.textContent = " 新台幣 2500 元 ";
+      fee.textContent = "2500";
     }
   });
 });
@@ -143,6 +143,41 @@ rightBtnSlide.addEventListener('click', () => {
     curIndex = (curIndex + 1) % slideImages.length;
     
     updateSlide();
+});
+
+
+// Add the attraction booking to the cart on click
+document.getElementById("bookBtn").addEventListener("click", async function() {
+    const date = document.getElementById("date").value.trim();
+    const time = document.querySelector('input[name="time"]:checked').value;
+    const fee = document.getElementById("fee").textContent.trim();
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        signinRedirectToBooking = true;
+        signinPopup.classList.add("open");
+        return;
+    }
+
+    try {
+        let response = await fetch("/api/booking", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json", 
+                "Authorization": "Bearer " + token 
+            },
+            body: JSON.stringify({ attr_id: Number(attractionId), booking_date: date, time: time, price: fee })
+        })
+
+        let result = await response.json();
+
+        if (result) {
+            location.href = "/booking";
+        }
+
+    } catch (err) {
+        console.error("Adding trip to the cart fails: ", err);
+    }
 });
 
 

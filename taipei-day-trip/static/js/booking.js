@@ -24,7 +24,7 @@ function renderBooking(user_name, booking_data) {
             span.textContent = booking_data.price;
         });
 
-        document.getElementById("bookingEmptyMsg").innerHTML = "";
+        document.getElementById("bookingEmptyMsg").classList.remove("show");
 
         // Show Booking section
         document.getElementById("bookedAttr").classList.add("show");
@@ -43,7 +43,7 @@ function renderBooking(user_name, booking_data) {
 
     } else {  // Display booking page with an empty state
 
-        document.getElementById("bookingEmptyMsg").textContent = "目前沒有任何預定行程";
+        document.getElementById("bookingEmptyMsg").classList.add("show");
 
         // Hide Booking section
         document.getElementById("bookedAttr").classList.remove("show");
@@ -78,7 +78,10 @@ async function initBookingPage() {
     try {
         let response = await fetch("/api/booking", {
             method: "GET",
-            headers: { "Authorization": "Bearer " + token }
+            headers: { 
+                "Content-Type": "application/json", 
+                "Authorization": "Bearer " + token 
+            },
         });
 
         let result = await response.json();

@@ -500,7 +500,7 @@ li button {
     min-width: 0;
 }
 
-.booking p {
+.booking p, .booking p > span {
     font-weight: 400;
     font-size: 16px;
 }
@@ -738,7 +738,7 @@ hr {
     transform: scale(0.99);
 }
 
-.bookedAttr.show, .contactBlock.show, .paymentBlock.show, .bookingSummary.show, .bookingHr.show{
+.bookedAttr.show, .contactBlock.show, .paymentBlock.show, .bookingSummary.show, .bookingHr.show {
     display: flex;
 }
 
@@ -747,7 +747,12 @@ hr {
 }
 
 #bookingEmptyMsg {
+    display: none;
     margin: 30px 20px 0 20px;
+}
+
+#bookingEmptyMsg.show {
+    display: flex;
 }
 
 
@@ -878,6 +883,10 @@ hr {
         padding: 0px 10px;
     }
 
+    .bookedAttrBlock h3 {
+        margin-left: 10px;
+    }
+
     hr, .bookingPage hr, .signinPopup, .signupPopup {
         width: calc(100% - 20px);
     }
@@ -904,5 +913,9 @@ hr {
 
     .bookedAttr > img {
         align-self: flex-end;
+    }
+
+    #bookingEmptyMsg {
+        margin-left: 10px;
     }
 }

@@ -251,14 +251,14 @@ async def getBooking(request: Request, session: SessionDep):
 
         booking_data, attraction_data = booking
 
-        return JSONResponse(
-            status_code=200,
-            content={"data": { "attraction": {"id": attraction_data.attr_id, "name": attraction_data.name, "address": attraction_data.address, "image": attraction_data.images[0]},
-                               "date": booking_data.booking_date, 
-                               "time": booking_data.time,
-                               "price": booking_data.price
-                             }}
-        )
+        return {"data": 
+                    { "attraction": {"id": attraction_data.attr_id, "name": attraction_data.name, "address": attraction_data.address, "image": attraction_data.images[0]},
+                      "date": booking_data.booking_date, 
+                      "time": booking_data.time,
+                      "price": booking_data.price
+                    }
+                }
+        
     except Exception as e:
         print(e)
         return JSONResponse(

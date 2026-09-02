@@ -94,13 +94,15 @@ async function getCurrentUser(token) {
     try {
         let response = await fetch("/api/user/auth", {
             method: "GET",
-            headers: { "Authorization": "Bearer " + token }
+            headers: { 
+                "Content-Type": "application/json", 
+                "Authorization": "Bearer " + token 
+            },
         });
 
         let result = await response.json();
 
         if (result.data) {
-            console.log(result.data);
             return result.data;
         }
 
@@ -141,7 +143,6 @@ async function checkSignInStatus() {
 
 //  Redirect to booking page after checking sign-in status
 document.getElementById("bookingTrip").addEventListener("click", async function(event) {
-
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -151,7 +152,6 @@ document.getElementById("bookingTrip").addEventListener("click", async function(
     }
     
     location.href = "/booking";
-
 });
 
 
@@ -204,6 +204,7 @@ document.getElementById("signupX").addEventListener("click", function() {
     signupPopup.classList.remove("open");
     signupForm.reset();
     signupError.textContent = "";
+    signinRedirectToBooking = false;
 });
 
 
