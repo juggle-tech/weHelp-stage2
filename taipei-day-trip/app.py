@@ -245,10 +245,14 @@ async def getBooking(request: Request, session: SessionDep):
 
     # Retrieve booking info
     try:
-        booking_data = query.get_booking(session, payload.get("id"))
+        booking = query.get_booking(session, int(payload.get("id")))
+        if booking_data is None:
+            return {"data": None}
+
+        booking_data, attraction_data = booking
         return JSONResponse(
             status_code=200,
-            content={"data": { "attraction": {"id": booking_data.attr_id, "name": booking_data.name, "address": booking_data.address, "image": booking_data.images[0]},
+            content={"data": { "attraction": {"id": attraction_data.attr_id, "name": attraction_data.name, "address": attraction_data.address, "image": attraction_data.images[0]},
                                "date": booking_data.booking_date, 
                                "time": booking_data.time,
                                "price": booking_data.price
@@ -263,7 +267,6 @@ async def getBooking(request: Request, session: SessionDep):
 
 
 class AttractionCart(BaseModel):
-    user_id: int = Field(..., examples=["1"])
     attr_id: int = Field(..., examples=["1"])
     booking_date: datetime = Field(..., examples=["2026-09-03"])
     time: str = Field(..., examples=["morning"])
@@ -281,7 +284,8 @@ async def createBooking(request: Request, session: SessionDep, body: AttractionC
 
     # Create booking
     try:
-        booking = query.add_booking_to_cart(session, body.user_id, body.attr_id, body.booking_date, body.time, body.price)
+        user_id = int(payload.get("id"))
+        booking = query.add_booking_to_cart(session, user_id, body.attr_id, body.booking_date, body.time, body.price)
         if booking is None:
             return JSONResponse(
                 status_code=400,
@@ -317,7 +321,8 @@ async def deleteBooking(request: Request, session: SessionDep, body: DeleteVerif
 
     # Delete booking
     try:
-        result = query.delete_booking(session, body.user_id)
+        user_id = int(payload.get("id"))
+        result = query.delete_booking(session, user_id)
         if result is None:
             return JSONResponse(
                 status_code=400,
