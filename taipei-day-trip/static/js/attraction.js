@@ -100,7 +100,7 @@ function initSlideShow(images) {
             shadow.classList.add("active");
         }
 
-        shadow.addEventListener('click', () => {
+        shadow.addEventListener("click", () => {
             curIndex = index;
             updateSlide();
         })
@@ -126,7 +126,7 @@ function updateSlide() {
 
 
 // Events for clicking slide buttons
-leftBtnSlide.addEventListener('click', () => {
+leftBtnSlide.addEventListener("click", () => {
     
     if (slideImages.length === 0) { return; }
 
@@ -136,13 +136,19 @@ leftBtnSlide.addEventListener('click', () => {
 
 });
  
-rightBtnSlide.addEventListener('click', () => {
+rightBtnSlide.addEventListener("click", () => {
     
     if (slideImages.length === 0) { return; }
 
     curIndex = (curIndex + 1) % slideImages.length;
     
     updateSlide();
+});
+
+const dateInput = document.getElementById("date");
+
+dateInput.addEventListener("click", () => {
+    dateInput.showPicker();
 });
 
 
@@ -154,8 +160,8 @@ document.getElementById("bookBtn").addEventListener("click", async function() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-        signinRedirectToBooking = true;
         signinPopup.classList.add("open");
+        signinPopup.scrollIntoView({ behavior: "smooth", block: "center" });
         return;
     }
 
@@ -170,8 +176,12 @@ document.getElementById("bookBtn").addEventListener("click", async function() {
         })
 
         let result = await response.json();
+        console.log(result);
 
-        if (result) {
+        if (result.has_booking) {
+            alert("You already have a booking. Please cancel it first.");
+            return;
+        } else if (result) {
             location.href = "/booking";
         }
 

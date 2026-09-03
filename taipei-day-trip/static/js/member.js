@@ -36,6 +36,7 @@ document.getElementById("signinBtn").addEventListener("click", async function() 
             localStorage.setItem("token", result.token);
             document.getElementById("signInStatus").textContent = "登出系統";
             document.getElementById("signinError").textContent = "";
+
             if (signinRedirectToBooking) {
                 location.href = "/booking";
             } else {
@@ -182,6 +183,7 @@ document.getElementById("signinText").addEventListener("click", function() {
     signupPopup.classList.add("open");
     signinForm.reset();
     signinError.textContent = "";
+    signinRedirectToBooking = false;
 });
 
 // Change to Signin pop-up dialog
@@ -190,6 +192,7 @@ document.getElementById("signupText").addEventListener("click", function() {
     signinPopup.classList.add("open");
     signupForm.reset();
     signupError.textContent = "";
+    signinRedirectToBooking = false;
 });
 
 // Close Signin / Signup pop-up dialogs

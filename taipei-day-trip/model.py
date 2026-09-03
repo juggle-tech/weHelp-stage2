@@ -1,7 +1,7 @@
 from datetime import datetime, date
 from typing import List, Optional
  
-from sqlalchemy import Column, ForeignKey, Text
+from sqlalchemy import Column, ForeignKey, Text, Integer
 from sqlalchemy.dialects.mysql import INTEGER as MySQLInteger, JSON
 from sqlmodel import DateTime, SQLModel, Field, text
 
@@ -60,9 +60,15 @@ class Booking(SQLModel, table=True):
         sa_column=Column(MySQLInteger(unsigned=True), primary_key=True, autoincrement=True)
     )
     user_id: int = Field(
-        sa_column=Column(MySQLInteger(unsigned=True), ForeignKey("user.id"), nullable=False, unique=True)
+        sa_column=Column(MySQLInteger(unsigned=True), ForeignKey("user.id", ondelete="CASCADE"), nullable=False, unique=True)
     )
-    attr_id: int = Field(nullable=False, foreign_key="attraction.attr_id")
+    attr_id: int = Field(
+        sa_column=Column(
+            Integer,
+            ForeignKey("attraction.attr_id", ondelete="CASCADE"),
+            nullable=False
+        )
+    )
     booking_date: date = Field(nullable=False)
     time: str = Field(max_length=20, nullable=False)
     price: int = Field(nullable=False)
@@ -76,7 +82,7 @@ class Booking(SQLModel, table=True):
 #         sa_column=Column(MySQLInteger(unsigned=True), primary_key=True, autoincrement=True)
 #     )
 #     booking_id: int = Field(
-#         sa_column=Column(MySQLInteger(unsigned=True), ForeignKey("booking.id"), nullable=False)
+#         sa_column=Column(MySQLInteger(unsigned=True), ForeignKey("booking.id", ondelete="CASCADE"), nullable=False)
 #     )
 #     contact_name: str = Field(max_length=255, nullable=False)
 #     contact_email: str = Field(max_length=255, nullable=False)

@@ -295,7 +295,7 @@ async def createBooking(request: Request, session: SessionDep, body: AttractionC
         elif booking is False:
             return JSONResponse(
                 status_code=400,
-                content={"error": True, "message": "已有預定行程"}
+                content={"error": True, "has_booking": True, "message": "已有預定行程"}
             )
 
         return {"attractionId": booking.attr_id, "date": booking.booking_date, "time": booking.time, "price": booking.price}

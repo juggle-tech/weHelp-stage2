@@ -7,9 +7,9 @@
 
 
 // Render booking details 
-function renderBooking(user_name, booking_data) {
+function renderBooking(user, booking_data) {
 
-    document.getElementById("username").textContent = user_name;
+    document.getElementById("username").textContent = user.name;
 
     if (booking_data) {  // Display booking page with booking details
         
@@ -23,6 +23,9 @@ function renderBooking(user_name, booking_data) {
         document.querySelectorAll(".bookedAttrPrice").forEach((span) => {
             span.textContent = booking_data.price;
         });
+
+        document.getElementById("contactName").value = user.name;
+        document.getElementById("contactEmail").value = user.email;
 
         document.getElementById("bookingEmptyMsg").classList.remove("show");
 
@@ -91,7 +94,7 @@ async function initBookingPage() {
             return;
         }
 
-        renderBooking(user.name, result.data);
+        renderBooking(user, result.data);
 
     } catch (err) {
         console.error("Retrieving booking fails: ", err);

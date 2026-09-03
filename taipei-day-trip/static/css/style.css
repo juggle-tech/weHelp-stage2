@@ -490,6 +490,11 @@ li button {
     background-color: #000000;
 }
 
+#date {
+    cursor: pointer;
+}
+
+
 /* Booking form */
 .booking {
     color: #666666;
@@ -697,7 +702,8 @@ hr {
 .formRow input {
     padding: 10px;
     border-radius: 5px;
-    color: #FFFFFF;
+    background-color: #FFFFFF;
+    color: #000000;
     border: 1px solid #E8E8E8;
 }
 
