@@ -74,17 +74,20 @@ class Booking(SQLModel, table=True):
     price: int = Field(nullable=False)
 
 
-# class BookingInfo(SQLModel, table=True):
-#     __tablename__ = "booking_info"
+# class Order(SQLModel, table=True):
+#     __tablename__ = "order"
 
 #     id: int | None = Field(
 #         default=None,
 #         sa_column=Column(MySQLInteger(unsigned=True), primary_key=True, autoincrement=True)
 #     )
+#     number: str = Field(max_length=20, nullable=False)
 #     booking_id: int = Field(
 #         sa_column=Column(MySQLInteger(unsigned=True), ForeignKey("booking.id", ondelete="CASCADE"), nullable=False)
 #     )
 #     contact_name: str = Field(max_length=255, nullable=False)
 #     contact_email: str = Field(max_length=255, nullable=False)
 #     contact_number: str = Field(max_length=20, nullable=False)
+#     prime: str = Field(max_length=255, nullable=False)
+#     status: bool = Field(default=False, nullable=False)
 

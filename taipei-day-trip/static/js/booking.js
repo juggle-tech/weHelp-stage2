@@ -66,7 +66,7 @@ function renderBooking(user, booking_data) {
 }
 
 
-// Reserved trip
+// Enter booking.html
 async function initBookingPage() {
     const token = localStorage.getItem("token");
 
@@ -100,5 +100,30 @@ async function initBookingPage() {
         console.error("Retrieving booking fails: ", err);
     }
 }
+
+
+// Delete booking on click
+document.getElementById("deleteBtn").addEventListener("click", async function() {
+    const token = localStorage.getItem("token");
+
+    try {
+        let response = await fetch("/api/booking", {
+            method: "DELETE",
+            headers: { 
+                "Content-Type": "application/json", 
+                "Authorization": "Bearer " + token 
+            },
+        });
+
+        let result = await response.json();
+
+        if (result.ok) {
+            location.reload();
+        }
+
+    } catch (err) {
+        console.error("Delete booking fails: ", err);
+    }
+});
 
 document.addEventListener("DOMContentLoaded", initBookingPage);

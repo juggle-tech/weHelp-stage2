@@ -307,11 +307,8 @@ async def createBooking(request: Request, session: SessionDep, body: AttractionC
         ) 
 
 
-class DeleteVerification(BaseModel):
-    user_id: int = Field(..., examples=["1"])
-
 @app.delete("/api/booking")
-async def deleteBooking(request: Request, session: SessionDep, body: DeleteVerification):
+async def deleteBooking(request: Request, session: SessionDep):
     # Verify authentication
     payload = _decode_token(request)
     if payload is None:
