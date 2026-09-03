@@ -109,12 +109,16 @@ def get_booking_by_userid(session, user_id):
 def add_booking_to_cart(session, user_id, attr_id, booking_date, time, price):
     booking = get_booking_by_userid(session, user_id)
 
-    if booking is not None:
-        return False
-    
     try:
-        booking= Booking(user_id=user_id , attr_id=attr_id, booking_date=booking_date, time=time, price=price)
-        session.add(booking)
+        if booking is not None:
+            booking.attr_id = attr_id
+            booking.booking_date = booking_date
+            booking.time = time
+            booking.price = price
+        else:
+            booking= Booking(user_id=user_id , attr_id=attr_id, booking_date=booking_date, time=time, price=price)
+            session.add(booking)
+
         session.commit()
         session.refresh(booking)
         return booking

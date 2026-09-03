@@ -292,11 +292,6 @@ async def createBooking(request: Request, session: SessionDep, body: AttractionC
                 status_code=400,
                 content={"error": True, "message": "建立失敗，輸入不正確或其他原因"}
             )
-        elif booking is False:
-            return JSONResponse(
-                status_code=400,
-                content={"error": True, "has_booking": True, "message": "已有預定行程"}
-            )
 
         return {"attractionId": booking.attr_id, "date": booking.booking_date, "time": booking.time, "price": booking.price}
     except Exception as e:
