@@ -5,6 +5,8 @@
  * - Sign up: Create account and show result message
  * - Check login status on page load
  * - Sign out: Clear token and reload page
+ * - Fetch current user info with a stored token
+ * - Redirect to booking page from the nav bar
  */
 
 

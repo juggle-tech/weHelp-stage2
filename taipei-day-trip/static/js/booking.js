@@ -3,6 +3,7 @@
  * - Render booking details or an empty state
  * - Redirect to homepage if the user has not signed in
  * - On page load: verify login status, fetch current user and booking data then render
+ * - Delete booking: remove the current booking and reload the page
  */
 
 

@@ -3,6 +3,7 @@
  * - Fetch and render attraction details
  * - Time selection: toggle guide fee
  * - Image slideshow: render images with left/right navigation and indicators
+ * - booking: submit booking request with auth token
  */
 
 
