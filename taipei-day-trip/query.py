@@ -2,14 +2,13 @@ import hashlib
 import secrets
 from typing import Counter
 
-from sqlmodel import func, or_, select
-from model import Attraction, User
+from sqlmodel import or_, select
+from model import Attraction, User, Booking
 
 PAGE_SIZE = 8
 
 
 def get_filtered_attractions(session, page, category, keyword):
-    
     stat = select(Attraction)
 
     if category:
@@ -38,19 +37,16 @@ def get_filtered_attractions(session, page, category, keyword):
 
 
 def get_all_categories(session):
-
     stat = select(Attraction.category).distinct()
     return session.exec(stat).all()
 
 
 def get_attraction_by_id(session, id):
-
     stat = select(Attraction).where(Attraction.attr_id == id)
     return session.exec(stat).first()
 
 
 def get_ordered_mrts(session):
-
     # Filter null and empty string
     stat = select(Attraction.mrt).where(Attraction.mrt.is_not(None), Attraction.mrt != "")
     results = session.exec(stat).all()
@@ -65,19 +61,23 @@ def get_ordered_mrts(session):
 
 
 def get_user_by_email(session, email):
-
     stat = select(User).where(User.email == email)
     return session.exec(stat).first()
 
 
 def create_user(session, name, email, password):
-
     hashed_pwd = hash_password(password)
     user = User(name=name, email=email, password=hashed_pwd)
-    session.add(user)
-    session.commit()
-    session.refresh(user)
-    return user
+
+    try:
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+        return user
+    except Exception as e:
+        print(e)
+        session.rollback()
+        return None
 
 
 def hash_password(password, salt=None):
@@ -90,3 +90,55 @@ def hash_password(password, salt=None):
 def verify_password(password, stored_pwd):
     salt, hashed_pwd = stored_pwd.split("$")
     return hash_password(password, salt) == stored_pwd
+
+
+def get_booking(session, user_id):
+    stat = (
+        select(Booking, Attraction)
+        .join(Attraction, Booking.attr_id == Attraction.attr_id)
+        .where(Booking.user_id == user_id)
+    )
+    return session.exec(stat).first()
+
+
+def get_booking_by_userid(session, user_id):
+    stat = select(Booking).where(Booking.user_id == user_id)
+    return session.exec(stat).one_or_none()
+
+
+def add_booking_to_cart(session, user_id, attr_id, booking_date, time, price):
+    booking = get_booking_by_userid(session, user_id)
+
+    try:
+        if booking is not None:
+            booking.attr_id = attr_id
+            booking.booking_date = booking_date
+            booking.time = time
+            booking.price = price
+        else:
+            booking= Booking(user_id=user_id , attr_id=attr_id, booking_date=booking_date, time=time, price=price)
+            session.add(booking)
+
+        session.commit()
+        session.refresh(booking)
+        return booking
+    except Exception as e:
+        print(e)
+        session.rollback()
+        return None
+
+
+def delete_booking(session, user_id):
+    booking = get_booking_by_userid(session, user_id)
+
+    if booking is None:
+        return None
+
+    try:
+        session.delete(booking)
+        session.commit()
+        return booking
+    except Exception as e:
+        print(e)
+        session.rollback()
+        return None

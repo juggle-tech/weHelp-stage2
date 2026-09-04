@@ -3,6 +3,7 @@
  * - Fetch and render attraction details
  * - Time selection: toggle guide fee
  * - Image slideshow: render images with left/right navigation and indicators
+ * - booking: submit booking request with auth token
  */
 
 
@@ -21,7 +22,6 @@ async function getAttractionDetail(attractionId) {
         let result = await response.json();
 
         if (!result.error) {
-            console.log("In");
             let attrName = document.getElementById("attrName");
             attrName.textContent = result.data.name;
 
@@ -55,11 +55,11 @@ const timeInputs = document.querySelectorAll('input[name="time"]');
 const fee = document.getElementById("fee");
 
 timeInputs.forEach((input) => {
-  input.addEventListener('change', () => {
+  input.addEventListener("change", () => {
     if (input.value === "morning") {
-      fee.textContent = " 新台幣 2000 元 ";
+      fee.textContent = "2000";
     } else {
-      fee.textContent = " 新台幣 2500 元 ";
+      fee.textContent = "2500";
     }
   });
 });
@@ -74,10 +74,21 @@ const indicator = document.getElementById("indicator");
 const leftBtnSlide = document.getElementById("leftBtnSlide");
 const rightBtnSlide = document.getElementById("rightBtnSlide");
 
+// Pre-load images
+function preloadImages(urls) {
+    urls.forEach((url) => {
+        const img = new Image();
+        img.src = url;
+    });
+}
+
+// Initialize slide show
 function initSlideShow(images) {
 
     slideImages = images;
     curIndex = 0;
+
+    preloadImages(slideImages);
 
     slideImg.style.backgroundImage = "url(" + slideImages[curIndex] + ")";
 
@@ -90,7 +101,7 @@ function initSlideShow(images) {
             shadow.classList.add("active");
         }
 
-        shadow.addEventListener('click', () => {
+        shadow.addEventListener("click", () => {
             curIndex = index;
             updateSlide();
         })
@@ -116,7 +127,7 @@ function updateSlide() {
 
 
 // Events for clicking slide buttons
-leftBtnSlide.addEventListener('click', () => {
+leftBtnSlide.addEventListener("click", () => {
     
     if (slideImages.length === 0) { return; }
 
@@ -126,13 +137,58 @@ leftBtnSlide.addEventListener('click', () => {
 
 });
  
-rightBtnSlide.addEventListener('click', () => {
+rightBtnSlide.addEventListener("click", () => {
     
     if (slideImages.length === 0) { return; }
 
     curIndex = (curIndex + 1) % slideImages.length;
     
     updateSlide();
+});
+
+const dateInput = document.getElementById("date");
+
+dateInput.addEventListener("click", () => {
+    dateInput.showPicker();
+});
+
+
+// Add the attraction booking to the cart on click
+document.getElementById("bookBtn").addEventListener("click", async function() {
+    const date = document.getElementById("date").value.trim();
+    const time = document.querySelector('input[name="time"]:checked').value;
+    const fee = document.getElementById("fee").textContent.trim();
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        signinPopup.classList.add("open");
+        signinPopup.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+    }
+
+    try {
+        let response = await fetch("/api/booking", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json", 
+                "Authorization": "Bearer " + token 
+            },
+            body: JSON.stringify({ attr_id: Number(attractionId), booking_date: date, time: time, price: fee })
+        })
+
+        let result = await response.json();
+        console.log(result);
+
+        if (result.has_booking) {
+            alert("You already have a booking. Please cancel it first.");
+            return;
+        } else if (result) {
+            location.href = "/booking";
+        }
+
+    } catch (err) {
+        console.error("Adding trip to the cart fails: ", err);
+    }
 });
 
 

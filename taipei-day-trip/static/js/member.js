@@ -5,10 +5,15 @@
  * - Sign up: Create account and show result message
  * - Check login status on page load
  * - Sign out: Clear token and reload page
+ * - Fetch current user info with a stored token
+ * - Redirect to booking page from the nav bar
  */
 
 
-// User sign in 
+// Flag: Ｕser login triggered by the trip booking button
+let signinRedirectToBooking = false;
+
+// User sign in
 document.getElementById("signinBtn").addEventListener("click", async function() {
     const email = document.getElementById("emailSignin").value.trim();
     const password = document.getElementById("passwordSignin").value.trim();
@@ -31,9 +36,14 @@ document.getElementById("signinBtn").addEventListener("click", async function() 
         if (result.token) {
             // Store token and change status
             localStorage.setItem("token", result.token);
-            location.reload();
             document.getElementById("signInStatus").textContent = "登出系統";
             document.getElementById("signinError").textContent = "";
+
+            if (signinRedirectToBooking) {
+                location.href = "/booking";
+            } else {
+                location.reload();
+            }
         } else {
             // Show error message
             document.getElementById("signinError").textContent = result.message;
@@ -68,7 +78,6 @@ document.getElementById("signupBtn").addEventListener("click", async function() 
         // Sign in successfully
         if (result.ok) {
             // Close pop-up and reset all values
-            // signupPopup.classList.remove("open");
             document.getElementById("signupForm").reset();
             error.textContent = "會員已成功註冊";
             error.style.color = "#1B5E20";
@@ -83,6 +92,32 @@ document.getElementById("signupBtn").addEventListener("click", async function() 
 });
 
 
+// Get current user info
+async function getCurrentUser(token) {
+    try {
+        let response = await fetch("/api/user/auth", {
+            method: "GET",
+            headers: { 
+                "Content-Type": "application/json", 
+                "Authorization": "Bearer " + token 
+            },
+        });
+
+        let result = await response.json();
+
+        if (result.data) {
+            return result.data;
+        }
+
+        return null;
+
+    } catch (err) {
+        console.error("Sign-in status fails:", err);
+        return null;
+    }
+}
+
+
 // Check logged-in status
 async function checkSignInStatus() {
     const token = localStorage.getItem("token");
@@ -93,16 +128,11 @@ async function checkSignInStatus() {
         return;
     }
 
+    const user = await getCurrentUser(token);
+
     try {
-        let response = await fetch("/api/user/auth", {
-            method: "GET",
-            headers: { "Authorization": "Bearer " + token }
-        });
-
-        let result = await response.json();
-
         // User has logged in with a token
-        if (result.data) {
+        if (user) {
             status.textContent = "登出系統";
         } else {
             localStorage.removeItem("token");
@@ -112,6 +142,20 @@ async function checkSignInStatus() {
         console.error("Sign-in status fails:", err);
     }
 }
+
+
+//  Redirect to booking page after checking sign-in status
+document.getElementById("bookingTrip").addEventListener("click", async function(event) {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        signinRedirectToBooking = true;
+        signinPopup.classList.add("open");
+        return;
+    }
+    
+    location.href = "/booking";
+});
 
 
 /* Pop-up dialogs */
@@ -126,7 +170,7 @@ const signupForm = document.getElementById("signupForm");
 document.getElementById("signInStatus").addEventListener("click", function(event) {
     event.preventDefault();
     
-    // Check if the user has token
+    // Check if the user has token： Text shown on screen is "登出系統"
     if (localStorage.getItem("token")) {
         localStorage.removeItem("token");
         location.reload();
@@ -141,6 +185,7 @@ document.getElementById("signinText").addEventListener("click", function() {
     signupPopup.classList.add("open");
     signinForm.reset();
     signinError.textContent = "";
+    signinRedirectToBooking = false;
 });
 
 // Change to Signin pop-up dialog
@@ -149,6 +194,7 @@ document.getElementById("signupText").addEventListener("click", function() {
     signinPopup.classList.add("open");
     signupForm.reset();
     signupError.textContent = "";
+    signinRedirectToBooking = false;
 });
 
 // Close Signin / Signup pop-up dialogs
@@ -156,12 +202,14 @@ document.getElementById("signinX").addEventListener("click", function() {
     signinPopup.classList.remove("open");
     signinForm.reset();
     signinError.textContent = "";
+    signinRedirectToBooking = false;
 });
 
 document.getElementById("signupX").addEventListener("click", function() {
     signupPopup.classList.remove("open");
     signupForm.reset();
     signupError.textContent = "";
+    signinRedirectToBooking = false;
 });
 
 

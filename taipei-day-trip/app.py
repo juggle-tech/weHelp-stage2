@@ -60,7 +60,7 @@ async def thankyou(request: Request):
 ## API
 # Attraction
 @app.get("/api/attractions")
-async def get_attractions(request: Request, session: SessionDep, page: int = 0, 
+async def get_attractions(session: SessionDep, page: int = 0, 
                         category: str | None = None, keyword: str | None = None):
 
     # Check if the input page is valid
@@ -92,7 +92,7 @@ async def get_attractions(request: Request, session: SessionDep, page: int = 0,
 
 
 @app.get("/api/attraction/{attractionId}")
-async def get_an_attraction(request: Request, session: SessionDep, attractionId: int):
+async def get_an_attraction(session: SessionDep, attractionId: int):
     try:
         data = query.get_attraction_by_id(session, attractionId)
     except Exception as e:
@@ -112,7 +112,7 @@ async def get_an_attraction(request: Request, session: SessionDep, attractionId:
 
 # Attraction Category
 @app.get("/api/categories")
-async def get_category(request: Request, session: SessionDep):
+async def get_category(session: SessionDep):
     try:
         data = query.get_all_categories(session)
     except Exception as e:
@@ -127,7 +127,7 @@ async def get_category(request: Request, session: SessionDep):
 
 # MRT Station
 @app.get("/api/mrts")
-async def get_mrts(request: Request, session: SessionDep):
+async def get_mrts(session: SessionDep):
     try:
         data = query.get_ordered_mrts(session)
     except Exception as e:
@@ -141,10 +141,6 @@ async def get_mrts(request: Request, session: SessionDep):
 
 
 # User
-class SigninInput(BaseModel):
-    email: str = Field(..., examples=["jung@example.com"])
-    password: str = Field(..., examples=["jung"])
-
 class SignupInput(BaseModel):
     name: str = Field(..., examples=["Jung"])
     email: str = Field(..., examples=["jung@example.com"])
@@ -152,49 +148,68 @@ class SignupInput(BaseModel):
 
 
 @app.post("/api/user")
-async def signup(request: Request, session: SessionDep, body: SignupInput):
+async def signup(session: SessionDep, body: SignupInput):
     try:
-        print(query.get_user_by_email(session, body.email))
-        if not query.get_user_by_email(session, body.email):
-            query.create_user(session, body.name, body.email, body.password)
-            return {"ok": True}
-        else:
+        if query.get_user_by_email(session, body.email):
             return JSONResponse(
                 status_code=400,
                 content={"error": True, "message": "註冊失敗，重複的 Email 或其他原因"}
             )
+        
+        user = query.create_user(session, body.name, body.email, body.password)
+        if user is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "存取失敗"}
+            )
+
+        return {"ok": True}
     except Exception as e:
         print(e)
         return JSONResponse(
             status_code=500,
             content={"error": True, "message": "伺服器內部錯誤"}
-        )    
+        ) 
+
+
+# Helper for decoding token
+def _decode_token(request: Request):
+    auth = request.headers.get("Authorization")
+    
+    # No token or in wrong format
+    if not auth or not auth.startswith("Bearer "):
+        return None
+
+    # Token starts with Bearer but with empty token
+    token = auth.removeprefix("Bearer ").strip()
+    if not token:
+        return None
+
+    try:
+        return jwt.decode(token, SECRET_KEY, algorithms="HS256")
+    except (ExpiredSignatureError, InvalidTokenError) as e:
+        print(e)
+        return None
 
 
 @app.get("/api/user/auth")
-async def get_current_user(request: Request, session: SessionDep):
-    auth = request.headers.get("Authorization")
+async def get_current_user(request: Request):
+    payload = _decode_token(request)
 
-    # No token -> null
-    if not auth or not auth.startswith("Bearer "):
+    if payload is None:
         return {"data": None}
-
-    token = auth.split(" ")[1]
-
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms="HS256")
-    except (ExpiredSignatureError, InvalidTokenError) as e:
-        print(e)
-        return {"data": None}
-
-    # Token is valid
     return {"data": {"id": payload.get("id"), "name": payload.get("name"), "email": payload.get("email")}}
 
+
+class SigninInput(BaseModel):
+    email: str = Field(..., examples=["jung@example.com"])
+    password: str = Field(..., examples=["jung"])
 
 @app.put("/api/user/auth")
 async def signin(session: SessionDep, body: SigninInput):
     try:
         user = query.get_user_by_email(session, body.email);
+
         # Verify that the user has signed in successfully
         if user and query.verify_password(body.password, user.password):
             payload = {"id": str(user.id), "email": user.email, "name": user.name, "iat": datetime.now(timezone.utc), 
@@ -215,6 +230,104 @@ async def signin(session: SessionDep, body: SigninInput):
             status_code=500,
             content={"error": True, "message": "伺服器內部錯誤"}
         )
+
+
+# Booking
+@app.get("/api/booking")
+async def getBooking(request: Request, session: SessionDep):
+    # Verify authentication
+    payload = _decode_token(request)
+    if payload is None:
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "未登入系統，拒絕存取"}
+        )
+
+    # Retrieve booking info
+    try:
+        booking = query.get_booking(session, int(payload.get("id")))
+        if booking is None:
+            return {"data": None}
+
+        booking_data, attraction_data = booking
+
+        return {"data": 
+                    { "attraction": {"id": attraction_data.attr_id, "name": attraction_data.name, "address": attraction_data.address, "image": attraction_data.images[0]},
+                      "date": booking_data.booking_date, 
+                      "time": booking_data.time,
+                      "price": booking_data.price
+                    }
+                }
+        
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        ) 
+
+
+class AttractionCart(BaseModel):
+    attr_id: int = Field(..., examples=["1"])
+    booking_date: datetime = Field(..., examples=["2026-09-03"])
+    time: str = Field(..., examples=["morning"])
+    price: int = Field(..., examples=["2000"])
+
+@app.post("/api/booking")
+async def createBooking(request: Request, session: SessionDep, body: AttractionCart):
+    # Verify authentication
+    payload = _decode_token(request)
+    if payload is None:
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "未登入系統，拒絕存取"}
+        )
+
+    # Create booking
+    try:
+        user_id = int(payload.get("id"))
+        booking = query.add_booking_to_cart(session, user_id, body.attr_id, body.booking_date, body.time, body.price)
+        if booking is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "建立失敗，輸入不正確或其他原因"}
+            )
+
+        return {"attractionId": booking.attr_id, "date": booking.booking_date, "time": booking.time, "price": booking.price}
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        ) 
+
+
+@app.delete("/api/booking")
+async def deleteBooking(request: Request, session: SessionDep):
+    # Verify authentication
+    payload = _decode_token(request)
+    if payload is None:
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "未登入系統，拒絕存取"}
+        )
+
+    # Delete booking
+    try:
+        user_id = int(payload.get("id"))
+        result = query.delete_booking(session, user_id)
+        if result is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "刪除失敗"}
+            )
+        return {"ok": True}
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        ) 
 
     
 
