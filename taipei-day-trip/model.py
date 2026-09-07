@@ -85,9 +85,9 @@ class Booking(SQLModel, table=True):
 #     booking_id: int = Field(
 #         sa_column=Column(MySQLInteger(unsigned=True), ForeignKey("booking.id", ondelete="CASCADE"), nullable=False)
 #     )
-#     contact_name: str = Field(max_length=255, nullable=False)
-#     contact_email: str = Field(max_length=255, nullable=False)
-#     contact_number: str = Field(max_length=20, nullable=False)
+#     name: str = Field(max_length=255, nullable=False)
+#     email: str = Field(max_length=255, nullable=False)
+#     phone: str = Field(max_length=20, nullable=False)
 #     prime: str = Field(max_length=255, nullable=False)
 #     status: bool = Field(default=False, nullable=False)
 

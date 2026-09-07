@@ -714,6 +714,25 @@ hr {
     font-style: Bold;
 }
 
+/* TapPay section */
+.formRow .error-message {
+    display: none;
+    color: #e53935;
+    font-size: 12px;
+}
+
+.formRow.is-error .error-message {
+    display: block;
+}
+
+.formRow.is-error .tpfield {
+    border-color: #e53935;
+}
+
+.formRow.is-success .tpfield {
+    border-color: #43a047;
+}
+
 
 /* Booking summary section */
 .bookingSummary {

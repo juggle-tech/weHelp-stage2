@@ -327,7 +327,17 @@ async def deleteBooking(request: Request, session: SessionDep):
         return JSONResponse(
             status_code=500,
             content={"error": True, "message": "伺服器內部錯誤"}
-        ) 
+        )
+
+
+
+# TapPay
+TAPPAY_APP_ID = os.getenv("TAPPAY_APP_ID")
+TAPPAY_APP_KEY = os.getenv("TAPPAY_APP_KEY")\
+
+@app.get("/api/tappay/config")
+def get_tappay_config():
+    return { "appId": TAPPAY_APP_ID, "appKey": TAPPAY_APP_KEY }
 
     
 
