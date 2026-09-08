@@ -84,15 +84,15 @@
     <div id="contactBlock" class="contactBlock">
       <h3>您的聯絡資訊</h3>
       <div class="formRow">
-        <label for="contactName">聯絡姓名：</label>
+        <label>聯絡姓名：</label>
         <input type="text" id="contactName" name="contactName" placeholder="Jung">
       </div>
       <div class="formRow">
-        <label for="contactEmail">聯絡信箱：</label>
+        <label>聯絡信箱：</label>
         <input type="email" id="contactEmail" name="contactEmail" placeholder="xxxxx@gmail.com">
       </div>
       <div class="formRow">
-        <label for="contactNumber">手機號碼：</label>
+        <label>手機號碼：</label>
         <input type="tel" id="contactNumber" name="contactNumber" placeholder="09xxxxxxxx">
       </div>
       <p>請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，請務必留下正確的聯絡方式。</p>
@@ -104,17 +104,17 @@
     <div id="paymentBlock" class="paymentBlock">
       <h3>信用卡付款資訊</h3>
       <div class="tpFormRow formRow">
-        <label for="cardNumber">卡片號碼：</label>
+        <label>卡片號碼：</label>
         <div id="card-number" class="tpfield"></div>
         <span class="error-message">請輸入正確的卡號</span>
       </div>
       <div class="tpFormRow formRow">
-        <label for="cardDate">過期時間：</label>
+        <label>過期時間：</label>
         <div id="card-expiration-date" class="tpfield"></div>
         <span class="error-message">請輸入正確的過期時間</span>
       </div>
       <div class="tpFormRow formRow">
-        <label for="cardVerify">驗證密碼：</label>
+        <label>驗證密碼：</label>
         <div id="card-ccv" class="tpfield"></div>
         <span class="error-message">請輸入正確的CCV</span>
       </div>
@@ -137,5 +137,9 @@
     <p>COPYRIGHT &copy; 2021 台北一日遊</p>
   </div>
   
+  <div id="loadingOverlay" class="loadingOverlay">
+    <div class="spinner"></div>
+    <p>訂單處理中，請稍候...</p>
+  </div>
 </body>
 </html>

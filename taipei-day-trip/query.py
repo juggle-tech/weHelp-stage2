@@ -3,7 +3,7 @@ import secrets
 from typing import Counter
 
 from sqlmodel import or_, select
-from model import Attraction, User, Booking
+from model import Attraction, User, Booking, BookingOrder
 
 PAGE_SIZE = 8
 
@@ -92,13 +92,13 @@ def verify_password(password, stored_pwd):
     return hash_password(password, salt) == stored_pwd
 
 
-def get_booking(session, user_id):
+def get_all_booking_data(session, user_id):
     stat = (
         select(Booking, Attraction)
         .join(Attraction, Booking.attr_id == Attraction.attr_id)
         .where(Booking.user_id == user_id)
     )
-    return session.exec(stat).first()
+    return session.exec(stat).one_or_none()
 
 
 def get_booking_by_userid(session, user_id):
@@ -141,4 +141,67 @@ def delete_booking(session, user_id):
     except Exception as e:
         print(e)
         session.rollback()
+        return None
+
+
+def create_order(session, user_id, prime, name, email, phone, order_number, booking, attraction):
+    try:
+        order = BookingOrder(order_number=order_number, user_id=user_id, booking_id=booking.id, 
+                             attr_id=attraction.attr_id, attr_name=attraction.name, attr_address=attraction.address,
+                             attr_image=attraction.images[0], booking_date=booking.booking_date, time=booking.time,
+                             price=booking.price, name=name, email=email, phone=phone, prime=prime)
+        session.add(order)
+        session.commit()
+        session.refresh(order)
+        return order
+    except Exception as e:
+        print(e)
+        session.rollback()
+        return None
+
+
+def check_duplicate_order(session, user_id, booking_id):
+    try:
+        stat = select(BookingOrder).where(BookingOrder.user_id == user_id, BookingOrder.booking_id == booking_id)
+        return session.exec(stat).first() is not None
+    except Exception as e:
+        print(e)
+        session.rollback()
+        return None
+
+
+def update_order_status(session, order_id, tappay_result):
+    try:
+        order = session.get(BookingOrder, order_id)
+
+        if order is None:
+            return None
+        
+        order.status = tappay_result.get("status")
+        order.rec_trade_id = tappay_result.get("rec_trade_id") or ""
+
+        session.commit()
+        session.refresh(order)
+        return order
+    except Exception as e:
+        print(e)
+        session.rollback()
+        return None
+
+
+def get_order_by_number(session, order_number):
+    try:
+        stat = select(BookingOrder).where(BookingOrder.order_number == order_number)
+        return session.exec(stat).one_or_none()
+    except Exception as e:
+        print(e)
+        return None
+
+
+def get_order_by_user(session, user_id):
+    try:
+        stat = select(BookingOrder).where(BookingOrder.user_id == user_id)
+        return session.exec(stat).all()
+    except Exception as e:
+        print(e)
         return None

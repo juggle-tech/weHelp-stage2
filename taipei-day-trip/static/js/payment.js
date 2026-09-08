@@ -1,15 +1,22 @@
+/**
+ * Booking payment page.
+ * - Initialize TapPay SDK and set up card fields
+ * - Validate card input and toggle submit button accordingly
+ * - On submit: get prime, create order and process payment
+ */
 
-// Initialize TapPay for Payment
+
 async function initTapPay() {
 
     const submitBtn = document.querySelector(".bookingConfirmBtn");
     submitBtn.setAttribute("disabled", true);
+    
 
     try {
         // Get App ID and App key for setup
-        let response = await fetch('/api/tappay/config');
+        let configResponse = await fetch("/api/tappay/config");
 
-        let config = await response.json();
+        let config = await configResponse.json();
 
         TPDirect.setupSDK(config.appId, config.appKey, "sandbox");
 
@@ -137,19 +144,26 @@ async function initTapPay() {
             // Get status of TapPay Fields
             const tappayStatus = TPDirect.card.getTappayFieldsStatus()
 
+            
             // Check if possible to get Prime
             if (tappayStatus.canGetPrime === false) {
-                alert('Cannot get prime')
-                return
+                alert("Cannot get prime");
+                return;
             }
+
+            submitBtn.setAttribute("disabled", true);
+            submitBtn.textContent = "處理中...";
+            document.getElementById("loadingOverlay").style.display = "flex";
+
 
             // Get prime
             TPDirect.card.getPrime( async (result) => {
                 if (result.status !== 0) {
-                    alert('Get prime error ' + result.msg);
+                    alert("Get prime error " + result.msg);
+                    resetSubmitBtn();
                     return;
                 }
-                alert('Get prime successful, prime: ' + result.card.prime);
+                // alert('Get prime successful, prime: ' + result.card.prime);
 
                 const token = localStorage.getItem("token");
 
@@ -173,19 +187,24 @@ async function initTapPay() {
                 if (OrderResult.data && OrderResult.data.number) {
                     window.location.replace("/thankyou?number=" + OrderResult.data.number);
                 } else {
-                    alert("Payment failed. Please try again.");
-                    submitBtn.removeAttribute("disabled");
+                    alert(OrderResult.message || "Payment failed. Please try again.");
+                    resetSubmitBtn();
                 }
             });
         }
+
+        function resetSubmitBtn() {
+            submitBtn.removeAttribute("disabled");
+            submitBtn.textContent = "確認訂購並付款";
+            document.getElementById("loadingOverlay").style.display = "none";
+        }
+
+        submitBtn.addEventListener("click", onSubmit);
     } catch (err) {
         console.error(" Initialize TapPay fails: ", err);
+        alert("Payment failed. Please check your card.");
+        resetSubmitBtn();
     }
 }
 
-initTapPay()
-
-
-
-
-
+document.addEventListener("DOMContentLoaded", initTapPay());
