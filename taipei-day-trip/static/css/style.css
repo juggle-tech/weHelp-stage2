@@ -707,6 +707,7 @@ hr {
     background-color: #FFFFFF;
     color: #000000;
     border: 1px solid #E8E8E8;
+    font-size: 15px;
 }
 
 .contactBlock p {
@@ -714,23 +715,41 @@ hr {
     font-style: Bold;
 }
 
+
 /* TapPay section */
-.formRow .error-message {
+.tpFormRow .error-message {
     display: none;
     color: #e53935;
-    font-size: 12px;
+    font-size: 13px;
 }
 
-.formRow.is-error .error-message {
+.tpFormRow.is-error .error-message {
     display: block;
 }
 
-.formRow.is-error .tpfield {
+.tpFormRow.is-error .tpfield {
     border-color: #e53935;
 }
 
-.formRow.is-success .tpfield {
+.tpFormRow.is-success .tpfield {
     border-color: #43a047;
+}
+
+.tpFormRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tpfield {
+    flex: 0 0 auto;
+    width: 160px;
+    padding: 10px;
+    height: 35px;
+    border: 1px solid #E8E8E8;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 

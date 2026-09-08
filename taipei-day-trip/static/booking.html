@@ -103,20 +103,22 @@
     <!-- Payment section -->
     <div id="paymentBlock" class="paymentBlock">
       <h3>信用卡付款資訊</h3>
-      <div class="formRow">
+      <div class="tpFormRow formRow">
         <label for="cardNumber">卡片號碼：</label>
         <div id="card-number" class="tpfield"></div>
-        
+        <span class="error-message">請輸入正確的卡號</span>
       </div>
-      <div class="formRow">
+      <div class="tpFormRow formRow">
         <label for="cardDate">過期時間：</label>
         <div id="card-expiration-date" class="tpfield"></div>
+        <span class="error-message">請輸入正確的過期時間</span>
       </div>
-      <div class="formRow">
+      <div class="tpFormRow formRow">
         <label for="cardVerify">驗證密碼：</label>
         <div id="card-ccv" class="tpfield"></div>
+        <span class="error-message">請輸入正確的CCV</span>
       </div>
-      <span class="error-message">請輸入正確的卡號</span>
+      
     </div>
 
     <hr class="bookingHr">

@@ -39,6 +39,18 @@ async function initTapPay() {
                     "color": "#000000",
                     "border": "1px solid #E8E8E8"
                 },
+                // Styling ccv field
+                'input.ccv': {
+                    'font-size': '14px'
+                },
+                // Styling expiration-date field
+                'input.expiration-date': {
+                    'font-size': '14px'
+                },
+                // Styling card-number field
+                'input.card-number': {
+                    'font-size': '14px'
+                },
                 ':focus': {
                     'color': 'black'
                 },
