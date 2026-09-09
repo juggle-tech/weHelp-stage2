@@ -830,6 +830,43 @@ hr {
 
 
 
+/*** Thankuou.html ***/
+.thankyouBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #666666;
+    font-size: 16px;
+}
+
+.thankyouBlock h3 {
+    margin-bottom: 30px;
+    color: #1B4332;
+}
+
+.thankyouBlock p {
+    color: #444444;
+    font-weight: 600;
+}
+
+.thankyouBlock p > span {
+    color: #333333;
+    font-weight: 400;
+}
+
+#thankyouPaymentStatus {
+    font-weight: 600;
+}
+
+.orderInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+
 /** Footer **/
 .footer {
     width: 100%;

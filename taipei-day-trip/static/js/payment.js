@@ -207,4 +207,4 @@ async function initTapPay() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", initTapPay());
+document.addEventListener("DOMContentLoaded", initTapPay);

@@ -437,6 +437,7 @@ def get_order_data(request: Request, session: SessionDep, orderNumber: str):
     try:
         order = query.get_order_by_number(session, orderNumber)
 
+
         if order is None:
             return JSONResponse(
                 status_code=400,
@@ -463,7 +464,7 @@ def get_order_data(request: Request, session: SessionDep, orderNumber: str):
                         "address": order.attr_address,
                         "image": order.attr_image[0]
                     },
-                    "date": order.date,
+                    "date": order.booking_date,
                     "time": order.time
                 },
                 "content": {
@@ -471,7 +472,7 @@ def get_order_data(request: Request, session: SessionDep, orderNumber: str):
                     "email": order.email,
                     "phone": order.phone
                 },
-                "status": int(order.status)
+                "status": order.status
             }
         }
     except Exception as e:
