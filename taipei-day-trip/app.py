@@ -157,7 +157,7 @@ class SignupInput(BaseModel):
 async def signup(session: SessionDep, body: SignupInput):
     try:
         try:
-            validate_email(body.email)
+            validate_email(body.email, check_deliverability=False)
         except EmailNotValidError:
             return JSONResponse(
                 status_code=400,
