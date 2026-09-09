@@ -142,3 +142,6 @@ cython_debug/
 
 # tests/
 tests/
+
+# EC2 Log
+nohup.out

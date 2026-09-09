@@ -171,6 +171,9 @@ def check_duplicate_order(session, user_id, booking_id):
 
 
 def update_order_status(session, order_id, tappay_result):
+    if tappay_result is None:
+        return None
+    
     try:
         order = session.get(BookingOrder, order_id)
 

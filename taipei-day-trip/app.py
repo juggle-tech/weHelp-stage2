@@ -14,6 +14,7 @@ from contextlib import asynccontextmanager
 from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel, Field
 from jwt import ExpiredSignatureError, InvalidTokenError
+from email_validator import validate_email, EmailNotValidError
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -148,13 +149,21 @@ async def get_mrts(session: SessionDep):
 # User
 class SignupInput(BaseModel):
     name: str = Field(..., examples=["Jung"])
-    email: str = Field(..., examples=["jung@example.com"])
+    email: str= Field(..., examples=["jung@example.com"])
     password: str = Field(..., examples=["jung"])
 
 
 @app.post("/api/user")
 async def signup(session: SessionDep, body: SignupInput):
     try:
+        try:
+            validate_email(body.email)
+        except EmailNotValidError:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "Email 格式不正確"}
+            )
+        
         if query.get_user_by_email(session, body.email):
             return JSONResponse(
                 status_code=400,
@@ -351,8 +360,8 @@ def _tappy_pay_by_prime(prime, amount, order_number, name, email, phone):
 
     try:
         client = tappay.Client(is_sandbox=True, partner_key=TAPPAY_PARTNER_KEY, merchant_id=TAPPAY_MERCHANT_ID)
-        card_holder_data = tappay.Models.CardHolderData(phone, name, email)
-        response = client.pay_by_prime(prime, amount, order_number, card_holder_data)
+        card_holder_data = tappay.Models.CardHolderData(phone_number=phone, name=name, email=email)
+        response = client.pay_by_prime(prime=prime, amount=amount, details=order_number, card_holder_data=card_holder_data)
 
         return response
     except Exception as e:
@@ -403,7 +412,7 @@ async def create_order(request: Request, session: SessionDep, body: OrderDetail)
         
         # Retrieve TapPay payment result
         tappay_result = _tappy_pay_by_prime(body.prime, booking.price, order_number, body.name, body.email, body.phone)
-        
+
         # Update payment status
         order = query.update_order_status(session, order.id, tappay_result)
 

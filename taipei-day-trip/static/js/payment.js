@@ -97,8 +97,7 @@ async function initTapPay() {
 
         // Listen for card input status updates
         TPDirect.card.onUpdate(function (update) {
-            // update.canGetPrime === true
-            // --> you can call TPDirect.card.getPrime()
+            
             if (update.canGetPrime) {
                 // Enable submit Button to get prime.
                 submitBtn.removeAttribute("disabled");
@@ -167,6 +166,14 @@ async function initTapPay() {
 
                 const token = localStorage.getItem("token");
 
+                // Verify email format
+                let emailInput = document.getElementById("contactEmail");
+                if (!emailInput.checkValidity()) {
+                    alert("請輸入正確的 Email 格式");
+                    resetSubmitBtn();
+                    return;
+                }
+
                 let OrderResponse = await fetch("/api/orders", {
                     method: "POST",
                     headers: { 
@@ -176,7 +183,7 @@ async function initTapPay() {
                     body: JSON.stringify({
                         prime: result.card.prime,
                         name: document.getElementById("contactName").value,
-                        email: document.getElementById("contactEmail").value,
+                        email: emailInput.value,
                         phone: document.getElementById("contactNumber").value
                     })
                 });
