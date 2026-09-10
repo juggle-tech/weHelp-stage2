@@ -160,9 +160,13 @@ def create_order(session, user_id, prime, name, email, phone, order_number, book
         return None
 
 
-def check_duplicate_order(session, user_id, booking_id):
+def check_duplicate_order(session, user_id, attr_id, booking_date, booking_time):
     try:
-        stat = select(BookingOrder).where(BookingOrder.user_id == user_id, BookingOrder.booking_id == booking_id)
+        stat = select(BookingOrder).where(
+                BookingOrder.user_id == user_id,
+                BookingOrder.attr_id == attr_id,
+                BookingOrder.booking_date == booking_date, 
+                BookingOrder.time == booking_time)
         return session.exec(stat).first() is not None
     except Exception as e:
         print(e)

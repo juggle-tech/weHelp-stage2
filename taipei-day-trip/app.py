@@ -392,7 +392,7 @@ async def create_order(request: Request, session: SessionDep, body: OrderDetail)
     order_number = f"{datetime.now().strftime('%Y%m%d%H%M%S')}-{user_id}-{booking.id}"
 
     # Check if this booking already has an order
-    if query.check_duplicate_order(session, user_id, booking.id):
+    if query.check_duplicate_order(session, user_id, booking.attr_id, booking.booking_date, booking.time):
         print("訂單建立失敗，已建立相同訂單")
         return JSONResponse(
             status_code=400,
@@ -416,15 +416,31 @@ async def create_order(request: Request, session: SessionDep, body: OrderDetail)
         # Update payment status
         order = query.update_order_status(session, order.id, tappay_result)
 
-        if order:
-            return {"data": {
-                    "number": order.order_number,
-                    "payment": {
-                        "status": order.status,
-                        "message": "付款成功"
-                    }
+        if not order:
+            print("付款失敗")
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "付款失敗"}
+            )
+
+
+        # Delete booking
+        result = query.delete_booking(session, user_id)
+
+        if result is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "刪除失敗"}
+            )
+        
+        return {"data": {
+                "number": order.order_number,
+                "payment": {
+                    "status": order.status,
+                    "message": "付款成功"
                 }
             }
+        }
     except Exception as e:
         print(e)
         return JSONResponse(
