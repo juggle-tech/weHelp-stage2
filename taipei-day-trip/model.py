@@ -74,20 +74,34 @@ class Booking(SQLModel, table=True):
     price: int = Field(nullable=False)
 
 
-# class Order(SQLModel, table=True):
-#     __tablename__ = "order"
+class BookingOrder(SQLModel, table=True):
+    __tablename__ = "booking_order"
 
-#     id: int | None = Field(
-#         default=None,
-#         sa_column=Column(MySQLInteger(unsigned=True), primary_key=True, autoincrement=True)
-#     )
-#     number: str = Field(max_length=20, nullable=False)
-#     booking_id: int = Field(
-#         sa_column=Column(MySQLInteger(unsigned=True), ForeignKey("booking.id", ondelete="CASCADE"), nullable=False)
-#     )
-#     contact_name: str = Field(max_length=255, nullable=False)
-#     contact_email: str = Field(max_length=255, nullable=False)
-#     contact_number: str = Field(max_length=20, nullable=False)
-#     prime: str = Field(max_length=255, nullable=False)
-#     status: bool = Field(default=False, nullable=False)
+    id: int | None = Field(
+        default=None,
+        sa_column=Column(MySQLInteger(unsigned=True), primary_key=True, autoincrement=True)
+    )
+    order_number: str = Field(unique=True, max_length=50, nullable=False)
+    user_id: int = Field(
+        sa_column=Column(MySQLInteger(unsigned=True), ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    )
+    booking_id: int = Field(
+        sa_column=Column(MySQLInteger(unsigned=True), ForeignKey("booking.id", ondelete="SET NULL"))
+    )
 
+    # Attraction and Booking data
+    attr_id: int = Field(nullable=False)
+    attr_name: str = Field(max_length=255, nullable=False)
+    attr_address: str = Field(max_length=255, nullable=False)
+    attr_image: str = Field(max_length=500, nullable=False)
+    booking_date: date = Field(nullable=False)
+    time: str = Field(max_length=20, nullable=False)
+    price: int = Field(nullable=False)
+
+    # Contact and Payment data
+    name: str = Field(max_length=255, nullable=False)
+    email: str = Field(max_length=255, nullable=False)
+    phone: str = Field(max_length=20, nullable=False)
+    prime: str = Field(max_length=255, nullable=False)
+    status: int = Field(default=1, nullable=False)
+    rec_trade_id: str = Field(max_length=255, default="", nullable=False)

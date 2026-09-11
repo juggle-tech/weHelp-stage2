@@ -1,6 +1,7 @@
 import os
 import jwt
 import query
+import tappay
 
 from fastapi import *
 from fastapi.responses import FileResponse, JSONResponse
@@ -13,9 +14,14 @@ from contextlib import asynccontextmanager
 from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel, Field
 from jwt import ExpiredSignatureError, InvalidTokenError
+from email_validator import validate_email, EmailNotValidError
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
+TAPPAY_APP_ID = os.getenv("TAPPAY_APP_ID")
+TAPPAY_APP_KEY = os.getenv("TAPPAY_APP_KEY")
+TAPPAY_PARTNER_KEY = os.getenv("TAPPAY_PARTNER_KEY")
+TAPPAY_MERCHANT_ID = os.getenv("TAPPAY_MERCHANT_ID")
 
 
 @asynccontextmanager
@@ -143,13 +149,21 @@ async def get_mrts(session: SessionDep):
 # User
 class SignupInput(BaseModel):
     name: str = Field(..., examples=["Jung"])
-    email: str = Field(..., examples=["jung@example.com"])
+    email: str= Field(..., examples=["jung@example.com"])
     password: str = Field(..., examples=["jung"])
 
 
 @app.post("/api/user")
 async def signup(session: SessionDep, body: SignupInput):
     try:
+        try:
+            validate_email(body.email, check_deliverability=False)
+        except EmailNotValidError:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "Email 格式不正確"}
+            )
+        
         if query.get_user_by_email(session, body.email):
             return JSONResponse(
                 status_code=400,
@@ -245,14 +259,19 @@ async def getBooking(request: Request, session: SessionDep):
 
     # Retrieve booking info
     try:
-        booking = query.get_booking(session, int(payload.get("id")))
+        booking = query.get_all_booking_data(session, int(payload.get("id")))
         if booking is None:
             return {"data": None}
 
         booking_data, attraction_data = booking
 
         return {"data": 
-                    { "attraction": {"id": attraction_data.attr_id, "name": attraction_data.name, "address": attraction_data.address, "image": attraction_data.images[0]},
+                    { "attraction": {
+                        "id": attraction_data.attr_id, 
+                        "name": attraction_data.name, 
+                        "address": attraction_data.address, 
+                        "image": attraction_data.images[0]
+                      },
                       "date": booking_data.booking_date, 
                       "time": booking_data.time,
                       "price": booking_data.price
@@ -327,7 +346,166 @@ async def deleteBooking(request: Request, session: SessionDep):
         return JSONResponse(
             status_code=500,
             content={"error": True, "message": "伺服器內部錯誤"}
-        ) 
+        )
+
+
+# TapPay
+@app.get("/api/tappay/config")
+async def get_tappay_config():
+    return { "appId": TAPPAY_APP_ID, "appKey": TAPPAY_APP_KEY }
+
+
+# Retrieve client payment details from TapPay
+def _tappy_pay_by_prime(prime, amount, order_number, name, email, phone):
+
+    try:
+        client = tappay.Client(is_sandbox=True, partner_key=TAPPAY_PARTNER_KEY, merchant_id=TAPPAY_MERCHANT_ID)
+        card_holder_data = tappay.Models.CardHolderData(phone_number=phone, name=name, email=email)
+        response = client.pay_by_prime(prime=prime, amount=amount, details=order_number, card_holder_data=card_holder_data)
+
+        return response
+    except Exception as e:
+        print(e)
+    
+
+class OrderDetail(BaseModel):
+    prime: str = Field(..., examples=["前端從第三方金流 TapPay 取得的交易碼"])
+    name: str = Field(..., examples=["Jung"])
+    email: str = Field(..., examples=["jung@example.com"])
+    phone: str = Field(..., examples=["0912345678"])
+
+@app.post("/api/orders")
+async def create_order(request: Request, session: SessionDep, body: OrderDetail):
+    payload = _decode_token(request)
+
+    if payload is None:
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "未登入系統，拒絕存取"}
+        )
+
+    user_id = int(payload.get("id"))
+    booking = query.get_booking_by_userid(session, user_id)
+    attraction = query.get_attraction_by_id(session, booking.attr_id)
+
+    # Create identical order number
+    order_number = f"{datetime.now().strftime('%Y%m%d%H%M%S')}-{user_id}-{booking.id}"
+
+    # Check if this booking already has an order
+    if query.check_duplicate_order(session, user_id, booking.attr_id, booking.booking_date, booking.time):
+        print("訂單建立失敗，已建立相同訂單")
+        return JSONResponse(
+            status_code=400,
+            content={"error": True, "message": "訂單建立失敗，已建立相同訂單"}
+        )
+
+    try:
+        # Create order
+        order = query.create_order(session, user_id, body.prime, body.name, body.email, body.phone, order_number, booking, attraction)
+
+        if order is None:
+            print("訂單建立失敗，輸入不正確或其他原因")
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "訂單建立失敗，輸入不正確或其他原因"}
+            )
+        
+        # Retrieve TapPay payment result
+        tappay_result = _tappy_pay_by_prime(body.prime, booking.price, order_number, body.name, body.email, body.phone)
+
+        # Update payment status
+        order = query.update_order_status(session, order.id, tappay_result)
+
+        if not order:
+            print("付款失敗")
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "付款失敗"}
+            )
+
+
+        # Delete booking
+        result = query.delete_booking(session, user_id)
+
+        if result is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "刪除失敗"}
+            )
+        
+        return {"data": {
+                "number": order.order_number,
+                "payment": {
+                    "status": order.status,
+                    "message": "付款成功"
+                }
+            }
+        }
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        )
+
+
+@app.get("/api/orders/{orderNumber}")
+def get_order_data(request: Request, session: SessionDep, orderNumber: str):
+    payload = _decode_token(request)
+
+    if payload is None:
+        return JSONResponse(
+            status_code=403,
+            content={"error": True, "message": "未登入系統，拒絕存取"}
+        )
+
+    try:
+        order = query.get_order_by_number(session, orderNumber)
+
+
+        if order is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": True, "message": "訂單編號不正確"}
+            )
+
+        user_id = int(payload.get("id"))
+
+        # Check if the order owned by the user
+        if order.user_id != user_id:
+            return JSONResponse(
+                status_code=403,
+                content={"error": True, "message": "無權限存取此訂單"}
+            )
+
+        return {
+            "data": {
+                "number": order.order_number,
+                "price": order.price,
+                "trip": {
+                    "attraction": {
+                        "id": order.attr_id,
+                        "name": order.attr_name,
+                        "address": order.attr_address,
+                        "image": order.attr_image[0]
+                    },
+                    "date": order.booking_date,
+                    "time": order.time
+                },
+                "content": {
+                    "name": order.name,
+                    "email": order.email,
+                    "phone": order.phone
+                },
+                "status": order.status
+            }
+        }
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        )
 
     
 

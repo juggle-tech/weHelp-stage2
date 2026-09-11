@@ -5,6 +5,8 @@
   <link href="/static/css/style.css" rel="stylesheet">
   <script src="/static/js/member.js" defer></script>
   <script src="/static/js/booking.js" defer></script>
+  <script src="/static/js/payment.js" defer></script>
+  <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.14.0"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Booking</title>
 </head>
@@ -82,16 +84,16 @@
     <div id="contactBlock" class="contactBlock">
       <h3>您的聯絡資訊</h3>
       <div class="formRow">
-        <label for="contactName">聯絡姓名：</label>
-        <input type="text" id="contactName" name="contactName" placeholder="Jung">
+        <label>聯絡姓名：</label>
+        <input type="text" id="contactName" name="contactName" placeholder="Jung" required>
       </div>
       <div class="formRow">
-        <label for="contactEmail">聯絡信箱：</label>
-      <input type="email" id="contactEmail" name="contactEmail" placeholder="xxxxx@gmail.com">
+        <label>聯絡信箱：</label>
+        <input type="email" id="contactEmail" name="contactEmail" placeholder="xxxxx@gmail.com" required>
       </div>
       <div class="formRow">
-        <label for="contactNumber">手機號碼：</label>
-      <input type="tel" id="contactNumber" name="contactNumber" placeholder="09xxxxxxxx">
+        <label>手機號碼：</label>
+        <input type="tel" id="contactNumber" name="contactNumber" placeholder="09xxxxxxxx" required>
       </div>
       <p>請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，請務必留下正確的聯絡方式。</p>
     </div>
@@ -101,18 +103,22 @@
     <!-- Payment section -->
     <div id="paymentBlock" class="paymentBlock">
       <h3>信用卡付款資訊</h3>
-      <div class="formRow">
-        <label for="cardNumber">卡片號碼：</label>
-      <input type="text" id="cardNumber" name="cardNumber" autocomplete="cc-number" maxlength="19" pattern="[0-9\s]{13,19}" placeholder="•••• •••• •••• ••••">
+      <div class="tpFormRow formRow">
+        <label>卡片號碼：</label>
+        <div id="card-number" class="tpfield"></div>
+        <span class="error-message">請輸入正確的卡號</span>
       </div>
-      <div class="formRow">
-        <label for="cardDate">過期時間：</label>
-      <input type="text" id="cardDate" name="cardDate" autocomplete="cc-exp" maxlength="5" pattern="(0[1-9]|1[0-2])\/[0-9]{2}" placeholder="MM/YY">
+      <div class="tpFormRow formRow">
+        <label>過期時間：</label>
+        <div id="card-expiration-date" class="tpfield"></div>
+        <span class="error-message">請輸入正確的過期時間</span>
       </div>
-      <div class="formRow">
-        <label for="cardVerify">驗證密碼：</label>
-      <input type="password" id="cardVerify" name="cardVerify" autocomplete="cc-csc" maxlength="4" pattern="[0-9]{3,4}" placeholder="CVV">
+      <div class="tpFormRow formRow">
+        <label>驗證密碼：</label>
+        <div id="card-ccv" class="tpfield"></div>
+        <span class="error-message">請輸入正確的CCV</span>
       </div>
+      
     </div>
 
     <hr class="bookingHr">
@@ -131,5 +137,9 @@
     <p>COPYRIGHT &copy; 2021 台北一日遊</p>
   </div>
   
+  <div id="loadingOverlay" class="loadingOverlay">
+    <div class="spinner"></div>
+    <p>訂單處理中，請稍候...</p>
+  </div>
 </body>
 </html>

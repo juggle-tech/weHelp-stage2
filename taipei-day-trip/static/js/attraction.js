@@ -9,13 +9,13 @@
 
 // Fetch the details of the attraction by its id and render them
 // Retrieve Attraction Id from the path
-const pathElement = window.location.pathname.split('/');
+const pathElement = window.location.pathname.split("/");
 const attractionId = pathElement[pathElement.length - 1];
 
 async function getAttractionDetail(attractionId) {
 
     try {
-        let response = await fetch("/api/attraction/" + attractionId , {
+        let response = await fetch("/api/attraction/" + attractionId, {
             method: "GET"
         });
 

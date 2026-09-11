@@ -2,10 +2,81 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link href="/static/css/style.css" rel="stylesheet">
+  <script src="/static/js/member.js" defer></script>
+  <script src="/static/js/thankyou.js" defer></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thank You</title>
+  <title>Booking</title>
 </head>
 <body>
+  <!-- Navigation bar -->
+  <div class="header">
+    <div class="navBar">
+      <a href="/" class="logo">台北一日遊</a>
+
+      <nav>
+        <ul class="menu">
+          <a id="bookingTrip">預定行程</a>
+          <a id="signInStatus">登入/註冊</a>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Pop-up Dialogue: Sign in / Sign up -->
+  <div class="signinPopup">
+    <div></div>
+    <form id="signinForm">
+      <div>
+        <h3>登入會員帳號</h3>
+        <p id="signinX">x</p>
+      </div>
+      <input type="text" id="emailSignin" name="email" placeholder="輸入電子信箱">
+      <input type="password" id="passwordSignin" name="password" placeholder="輸入密碼">
+      <button type="button" id="signinBtn" class="signinBtn">登入帳戶</button>
+      <p>還沒有帳戶？<a id="signinText">點此註冊</a></p>
+      <p class="errorMsg" id="signinError"></p>
+    </form>
+  </div>
+
+  <div class="signupPopup">
+    <div></div>
+    <form id="signupForm">
+      <div>
+        <h3>註冊會員帳號</h3>
+        <p id="signupX">x</p>
+      </div>
+      <input type="text" id="name" name="name" placeholder="輸入姓名">
+      <input type="text" id="emailSignup" name="email" placeholder="輸入電子信箱">
+      <input type="password" id="passwordSignup" name="password" placeholder="輸入密碼">
+      <button type="button" id="signupBtn" class="signupBtn">註冊新帳戶</button>
+      <p>已經有帳戶了？<a id="signupText">點此登入</a></p>
+      <p class="errorMsg" id="signupError"></p>
+    </form>
+  </div>
+
+  <div class="mainContentBlock thankyouBlock">
+    <div class="orderNumInfo">
+      <h3>您的訂單已成功建立</h3>
+      <p>訂單號碼：<span id="thankyouOrderNum"></span></p>
+    </div>
+    <div class="orderInfo">
+      <p>景點: <span id="thankyouAttrName"></span></p>
+      <p>日期: <span id="thankyouAttrDate"></span></p>
+      <p>時間: <span>早上 9 點 ~ 下午 4 點</sapn> </p>
+      <p>費用: <span id="thankyouAttrPrice"></span> </p>
+      <p>地點: <span id="thankyouAttrAddr"></span></p>
+      <div>
+        <p>付款狀態：<span id="thankyouPaymentStatus"></span></p>
+        <!-- <button> 付款 </button> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer" class="footer">
+    <p>COPYRIGHT &copy; 2021 台北一日遊</p>
+  </div>
   
 </body>
 </html>

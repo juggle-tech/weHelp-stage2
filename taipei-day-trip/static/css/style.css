@@ -707,11 +707,49 @@ hr {
     background-color: #FFFFFF;
     color: #000000;
     border: 1px solid #E8E8E8;
+    font-size: 15px;
 }
 
 .contactBlock p {
     font-weight: 700;
     font-style: Bold;
+}
+
+
+/* TapPay section */
+.tpFormRow .error-message {
+    display: none;
+    color: #e53935;
+    font-size: 13px;
+}
+
+.tpFormRow.is-error .error-message {
+    display: block;
+}
+
+.tpFormRow.is-error .tpfield {
+    border-color: #e53935;
+}
+
+.tpFormRow.is-success .tpfield {
+    border-color: #43a047;
+}
+
+.tpFormRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tpfield {
+    flex: 0 0 auto;
+    width: 160px;
+    padding: 10px;
+    height: 35px;
+    border: 1px solid #E8E8E8;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 
@@ -761,6 +799,83 @@ hr {
 
 #bookingEmptyMsg.show {
     display: flex;
+}
+
+.loadingOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.85);
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #e0e0e0;
+    border-top-color: #333;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
+
+/*** Thankuou.html ***/
+.thankyouBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #666666;
+    font-size: 16px;
+}
+
+.orderNumInfo > h3 {
+    margin-bottom: 10px;
+}
+
+.orderNumInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    color: #1B4332;
+}
+
+.orderNumInfo p {
+    font-size: 18px;
+    color: #856342;
+    font-weight: 500;
+}
+
+.orderInfo p {
+    color: #444444;
+    font-weight: 600;
+}
+
+.orderInfo p > span {
+    color: #333333;
+    font-weight: 400;
+}
+
+#thankyouPaymentStatus {
+    font-weight: 600;
+}
+
+.orderInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 
