@@ -37,6 +37,8 @@ async function initThankyou() {
 
     if (result.data) {
         // Render thankyou.html
+        document.getElementById("thankyouOrderNum").textContent = result.data.number;
+        
         trip = result.data.trip;
         document.getElementById("thankyouAttrName").textContent = trip.attraction.name;
         document.getElementById("thankyouAttrDate").textContent = trip.date;
