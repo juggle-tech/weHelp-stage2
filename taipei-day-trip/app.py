@@ -15,6 +15,8 @@ from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel, Field
 from jwt import ExpiredSignatureError, InvalidTokenError
 from email_validator import validate_email, EmailNotValidError
+from mcp_server import mcp_app
+from fastmcp.utilities.lifespan import combine_lifespans
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -38,7 +40,9 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(lifespan=lifespan)
+# App setup
+app = FastAPI(lifespan = combine_lifespans(lifespan, mcp_app.lifespan))
+app.mount("/mcp", mcp_app)
 
 
 # Static Pages (Never Modify Code in this Block)

@@ -216,8 +216,12 @@ def get_order_by_user(session, user_id):
 
 
 def get_token(session, user_id):
-    stat = select(MCPToken).where(MCPToken.user_id == user_id)
-    return session.exec(stat).one_or_none()
+    try:
+        stat = select(MCPToken).where(MCPToken.user_id == user_id)
+        return session.exec(stat).one_or_none()
+    except Exception as e:
+        print(e)
+        return None
 
 
 def update_token(session, user_data):
@@ -248,3 +252,23 @@ def update_token(session, user_data):
         print(e)
         session.rollback()
         return None
+
+
+def get_user_by_mcp_token(session, token):
+    try:
+        stat = select(MCPToken).where(MCPToken.token == token)
+        user = session.exec(stat).one_or_none()
+        return user.user_id
+    except Exception as e:
+            print(e)
+            return None
+
+
+def get_attractions_by_keyword(session, keyword):
+    stat = select(Attraction).where(
+        or_(
+            Attraction.name.contains(keyword),
+            Attraction.mrt == keyword,
+        )
+    )
+    return session.exec(stat).all()
