@@ -512,6 +512,39 @@ def get_order_data(request: Request, session: SessionDep, orderNumber: str):
             content={"error": True, "message": "伺服器內部錯誤"}
         )
 
+
+# Get user's MCP token
+@app.get("/api/token")
+def get_token(request: Request, session: SessionDep):
+    payload = _decode_token(request)
+    user_id = int(payload.get("id"))
+    
+    try:
+        token = query.get_token(session, user_id)
+        return {"ok": True,"token": token.token}
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        )
+
+
+# Regenerate user's MCP token
+@app.put("/api/token")
+def update_token(request: Request, session: SessionDep):
+    payload = _decode_token(request)
+    
+    try:
+        token = query.update_token(session, payload)
+        return {"ok": True,"token": token.token}
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        )
+    
     
 
 app.mount("/static", StaticFiles(directory = "static"), name = "static")

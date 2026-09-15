@@ -100,7 +100,7 @@ async function getCurrentUser(token) {
             headers: { 
                 "Content-Type": "application/json", 
                 "Authorization": "Bearer " + token 
-            },
+            }
         });
 
         let result = await response.json();
