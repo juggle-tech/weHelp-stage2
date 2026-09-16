@@ -39,10 +39,12 @@ def search_attractions(keyword: str) -> dict:
         with Session(engine) as session:
             attractions = query.get_attractions_by_keyword(session, keyword)
 
+        print(attractions)
+
         return { 
             "data": [
                 {
-                    "id": attr.id,
+                    "id": attr.attr_id,
                     "name": attr.name,
                     "description": attr.description
                 }                
