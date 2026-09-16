@@ -915,13 +915,13 @@ ul {
     margin-left: 30px;
 }
 
-li {
+.mcpLi {
     list-style: disc;
     padding-left: 3px;
     margin-left: 10px;
 }
 
-li span {
+.mcpLi span {
     display: block;
     margin-top: 10px;
 }
