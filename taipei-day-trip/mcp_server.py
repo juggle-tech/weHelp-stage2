@@ -77,7 +77,7 @@ def add_to_cart(date: str, time: str, id: int) -> dict:
 
             query.add_booking_to_cart(session, user_id, id, date, time, price)
 
-            url = "http://127.0.0.1:8000/booking"
+            url = "http://43.213.218.236:8000/booking"
             
             message = f"(台北導覽行程，預定成功，請到 {url} 完成付款。)"
 
