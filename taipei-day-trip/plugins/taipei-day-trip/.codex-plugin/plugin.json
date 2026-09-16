@@ -1,0 +1,24 @@
+{
+  "name": "taipei-day-trip",
+  "version": "1.0.0",
+  "description": "搜尋台北市景點，並協助將選定的景點行程加入購物車。",
+  "author": {
+    "name": "Jung"
+  },
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Taipei-day-trip",
+    "shortDescription": "搜尋台北景點並預訂導覽行程",
+    "longDescription": "透過關鍵字尋找台北市景點；使用者確認後，可將指定日期與時段的導覽行程加入購物車。",
+    "developerName": "Jung",
+    "category": "Travel",
+    "capabilities": ["Interactive", "Write"],
+    "defaultPrompt": [
+      "幫我找台北車站附近適合一日遊的景點。",
+      "搜尋大稻埕附近的景點。",
+      "我想預訂一個台北景點導覽行程。"
+    ],
+    "brandColor": "#0F766E"
+  }
+}

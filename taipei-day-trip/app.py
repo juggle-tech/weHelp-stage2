@@ -15,6 +15,8 @@ from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel, Field
 from jwt import ExpiredSignatureError, InvalidTokenError
 from email_validator import validate_email, EmailNotValidError
+from mcp_server import mcp_app
+from fastmcp.utilities.lifespan import combine_lifespans
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -38,7 +40,9 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(lifespan=lifespan)
+# App setup
+app = FastAPI(lifespan = combine_lifespans(lifespan, mcp_app.lifespan))
+app.mount("/mcp", mcp_app)
 
 
 # Static Pages (Never Modify Code in this Block)
@@ -60,6 +64,11 @@ async def booking(request: Request):
 @app.get("/thankyou", include_in_schema=False)
 async def thankyou(request: Request):
     return FileResponse("./static/thankyou.html", media_type="text/html")
+
+
+@app.get("/member", include_in_schema=False)
+async def member(request: Request):
+    return FileResponse("./static/member.html", media_type="text/html")
 
 
 
@@ -507,6 +516,39 @@ def get_order_data(request: Request, session: SessionDep, orderNumber: str):
             content={"error": True, "message": "伺服器內部錯誤"}
         )
 
+
+# Get user's MCP token
+@app.get("/api/token")
+def get_token(request: Request, session: SessionDep):
+    payload = _decode_token(request)
+    user_id = int(payload.get("id"))
+    
+    try:
+        token = query.get_token(session, user_id)
+        return {"ok": True,"token": token.token}
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        )
+
+
+# Regenerate user's MCP token
+@app.put("/api/token")
+def update_token(request: Request, session: SessionDep):
+    payload = _decode_token(request)
+    
+    try:
+        token = query.update_token(session, payload)
+        return {"ok": True,"token": token.token}
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": True, "message": "伺服器內部錯誤"}
+        )
+    
     
 
 app.mount("/static", StaticFiles(directory = "static"), name = "static")

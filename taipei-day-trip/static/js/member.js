@@ -100,7 +100,7 @@ async function getCurrentUser(token) {
             headers: { 
                 "Content-Type": "application/json", 
                 "Authorization": "Bearer " + token 
-            },
+            }
         });
 
         let result = await response.json();
@@ -133,7 +133,7 @@ async function checkSignInStatus() {
     try {
         // User has logged in with a token
         if (user) {
-            status.textContent = "登出系統";
+            status.textContent = "會員中心";
         } else {
             localStorage.removeItem("token");
             status.textContent = "登入/註冊";
@@ -158,6 +158,9 @@ document.getElementById("bookingTrip").addEventListener("click", async function(
 });
 
 
+
+
+
 /* Pop-up dialogs */
 // Toggle signin and signup pop-up dialogs
 const signinPopup = document.querySelector(".signinPopup");
@@ -167,14 +170,15 @@ const signupError = document.getElementById("signupError");
 const signinForm = document.getElementById("signinForm");
 const signupForm = document.getElementById("signupForm");
 
-document.getElementById("signInStatus").addEventListener("click", function(event) {
+// Direct to member page if the user has signed in
+const memberStatus = document.getElementById("signInStatus");
+memberStatus.addEventListener("click", function(event) {
     event.preventDefault();
-    
-    // Check if the user has token： Text shown on screen is "登出系統"
-    if (localStorage.getItem("token")) {
-        localStorage.removeItem("token");
-        location.reload();
-    } else if (!signupPopup.classList.contains("open")) {
+
+    // Check if the user has token： Text shown on screen is "會員中心"
+    if (memberStatus.textContent === "會員中心") {
+        location.href = "/member";
+    } else if (!signinPopup.classList.contains("open")) {
         signinPopup.classList.add("open");
     }
 });

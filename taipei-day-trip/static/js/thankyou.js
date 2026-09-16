@@ -56,4 +56,5 @@ async function initThankyou() {
     }
 }
 
+
 document.addEventListener("DOMContentLoaded", initThankyou);

@@ -1,9 +1,10 @@
 import hashlib
 import secrets
+import time
 from typing import Counter
 
 from sqlmodel import or_, select
-from model import Attraction, User, Booking, BookingOrder
+from model import Attraction, User, Booking, BookingOrder, MCPToken
 
 PAGE_SIZE = 8
 
@@ -212,3 +213,62 @@ def get_order_by_user(session, user_id):
     except Exception as e:
         print(e)
         return None
+
+
+def get_token(session, user_id):
+    try:
+        stat = select(MCPToken).where(MCPToken.user_id == user_id)
+        return session.exec(stat).one_or_none()
+    except Exception as e:
+        print(e)
+        return None
+
+
+def update_token(session, user_data):
+
+    user_id = int(user_data.get("id"))
+    user_name = user_data.get("name")
+    user_email = user_data.get("email")
+
+    salt = secrets.token_hex(8)
+    new_token = hashlib.sha256(f"{user_name}|{user_email}|{salt}|{time.time()}".encode()).hexdigest()
+
+    try:
+        stat = select(MCPToken).where(MCPToken.user_id == user_id)
+        token= session.exec(stat).one_or_none()
+
+        if token is None:
+            # Create a new token
+            token = MCPToken(user_id=user_id, token=new_token)
+            session.add(token)
+        else:
+            # Update token
+            token.token = new_token
+
+        session.commit()
+        session.refresh(token)
+        return token
+    except Exception as e:
+        print(e)
+        session.rollback()
+        return None
+
+
+def get_user_by_mcp_token(session, token):
+    try:
+        stat = select(MCPToken).where(MCPToken.token == token)
+        user = session.exec(stat).one_or_none()
+        return user.user_id
+    except Exception as e:
+            print(e)
+            return None
+
+
+def get_attractions_by_keyword(session, keyword):
+    stat = select(Attraction).where(
+        or_(
+            Attraction.name.contains(keyword),
+            Attraction.mrt == keyword,
+        )
+    )
+    return session.exec(stat).all()

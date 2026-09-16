@@ -105,3 +105,17 @@ class BookingOrder(SQLModel, table=True):
     prime: str = Field(max_length=255, nullable=False)
     status: int = Field(default=1, nullable=False)
     rec_trade_id: str = Field(max_length=255, default="", nullable=False)
+
+
+class MCPToken(SQLModel, table=True):
+    __tablename__ = "mcp_token"
+
+    id: int | None = Field(
+        default=None,
+        sa_column=Column(MySQLInteger(unsigned=True), primary_key=True, autoincrement=True)
+    )
+    user_id: int = Field(
+        sa_column=Column(MySQLInteger(unsigned=True), ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    )
+    token: str = Field(max_length=255)
+    

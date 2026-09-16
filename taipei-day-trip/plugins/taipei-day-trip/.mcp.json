@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "taipei-day-trip": {
+      "type": "http",
+      "url": "http://43.213.218.236:8000/mcp/",
+      "http_headers": {
+        "Authorization": "Bearer <token>"
+      }
+    }
+  }
+}
