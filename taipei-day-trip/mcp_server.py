@@ -2,7 +2,7 @@ import query
 
 from fastmcp import FastMCP
 from sqlmodel import Session
-from fastmcp.server.dependencies import get_http_request
+from fastmcp.server.dependencies import get_http_headers, get_http_request
 from database import engine
 
 
@@ -11,12 +11,13 @@ mcp = FastMCP("台北一日遊")
 def get_user_id():
     # Get mcp token
     request = get_http_request()
-    auth = request.headers.get("authorization", "")
+    auth = request.headers.get("Authorization", "")
 
     if not auth.startswith("Bearer "):
         return None
 
     mcp_token = auth.removeprefix("Bearer ").strip()
+    
 
     # Get user id
     with Session(engine) as session:
@@ -24,6 +25,8 @@ def get_user_id():
 
     if user_id:
         return user_id
+
+    print(user_id)
     
     return None
 
@@ -33,7 +36,7 @@ def search_attractions(keyword: str) -> dict:
     user_id = get_user_id()
     
     if user_id is None:
-        return {"error": True}
+        return {"error": True, "message": "未登入或 MCP Token 無效"}
     
     try:
         with Session(engine) as session:
@@ -59,19 +62,31 @@ def add_to_cart(date: str, time: str, id: int) -> dict:
     user_id = get_user_id()
 
     if user_id is None:
-        return {"error": True}
+        return {"error": True, "message": "未登入或 MCP Token 無效"}
+
+    normalized_time = time.strip().lower()
+
+    time_mapping = {
+        "早上": ("morning", 2000),
+        "morning": ("morning", 2000),
+        "下午": ("afternoon", 2500),
+        "afternoon": ("afternoon", 2500),
+    }
+
+    if normalized_time not in time_mapping:
+        return {
+            "error": True,
+            "message": "時段只能是：早上、下午、morning 或 afternoon"
+        }
+
+    time, price = time_mapping[normalized_time]
 
     try:
         with Session(engine) as session:
             attraction = query.get_attraction_by_id(session, id)
 
             if attraction is None:
-                return {"error": True}
-
-            if time == "早上":
-                price = "2000"
-            elif time == "下午":
-                price = "2500"
+                return {"error": True, "message": f"找不到景點編號 {id}"}
 
             query.add_booking_to_cart(session, user_id, id, date, time, price)
 
